@@ -1,12 +1,8 @@
 import React from 'react';
-import {Link, useLocation} from "react-router-dom";
 import UserDropdown from "./UserDropdown";
-import AuthLinks from "./AuthLinks";
+import NavLink from "./NavLink";
 
 const Navbar = () => {
-    const location = useLocation();
-    const currentPath = location.pathname;
-
     const user = localStorage.getItem("token");
     const email = user ? JSON.parse(atob(user.split('.')[1])).email : null;
 
@@ -14,43 +10,29 @@ const Navbar = () => {
         <nav className="navbar navbar-expand-lg navbar-dark bg-light">
             <div className="container-fluid">
                 <span className="navbar-brand">Task Tracker</span>
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false"
+                        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"
                         aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"/>
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav">
-                        <li className="nav-item">
-                            <Link to="/" className={currentPath === '/' ? 'nav-link active' : 'nav-link'}>Home</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/tasks/user"
-                                  className={currentPath === '/tasks/user' ? 'nav-link active' : 'nav-link'}>
-                                My Tasks
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/tasks/user/assigned"
-                                  className={currentPath === '/tasks/user/assigned' ? 'nav-link active' : 'nav-link'}>
-                                Assigned Tasks
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/tasks/user/completed"
-                                  className={currentPath === '/tasks/user/completed' ? 'nav-link active' : 'nav-link'}>
-                                Completed Tasks
-                            </Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/tasks/create"
-                                  className={currentPath === '/tasks/create' ? 'nav-link active' : 'nav-link'}>Create
-                                Task</Link>
-                        </li>
+                        <NavLink to="/" text="Home"/>
+                        <NavLink to="/tasks/user" text="My Tasks"/>
+                        <NavLink to="/tasks/user/assigned" text="Assigned Tasks"/>
+                        <NavLink to="/tasks/user/completed" text="Completed Tasks"/>
+                        <NavLink to="/tasks/create" text="Create Task"/>
                     </ul>
                     <div className="nav-item dropdown ms-auto">
-                        {!user && AuthLinks(currentPath)}
-                        {user && UserDropdown(currentPath, email)}
+                        <ul className="navbar-nav">
+                            {!user &&
+                                <>
+                                    <NavLink to="/login" text="Login"/>
+                                    <NavLink to="/register" text="Register"/>
+                                </>
+                            }
+                            {user && UserDropdown(email)}
+                        </ul>
                     </div>
                 </div>
             </div>

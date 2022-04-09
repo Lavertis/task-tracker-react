@@ -24,9 +24,8 @@ const UserTasks = () => {
                     signal: controller.signal
                 });
                 isMounted && setTasks(response.data);
-
             } catch (err) {
-                console.error(err);
+
             }
         }
 

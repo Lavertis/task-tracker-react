@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from "react-router-dom";
 
 // homepage for task tracker
 const Home = () => (
@@ -10,7 +11,7 @@ const Home = () => (
             but also assign them to other users.
         </p>
         <p>To get started, click the "Add Task" button below.</p>
-        <button className="btn btn-primary mt-2">Add Task</button>
+        <Link to="/tasks/create" className="btn btn-primary mt-2">Add Task</Link>
     </div>
 );
 

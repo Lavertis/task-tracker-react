@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import axios from "axios";
+import instance from '../../config/axios';
 
 const Login = () => {
     const [data, setData] = useState({email: "", password: ""})
@@ -12,7 +12,7 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const {data: res} = await axios.post("auth", data)
+            const {data: res} = await instance.post("auth", data)
             localStorage.setItem("token", res.data)
             window.location = "/"
         } catch (error) {
