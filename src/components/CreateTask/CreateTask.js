@@ -21,7 +21,7 @@ const CreateTask = () => {
         try {
             const {data: res} = await axiosPrivate.post("tasks", data)
             console.log(res)
-            window.location = "/tasks"
+            window.location = "/tasks/user"
         } catch (error) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
