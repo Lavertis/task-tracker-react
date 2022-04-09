@@ -25,13 +25,27 @@ const Navbar = () => {
                             <Link to="/" className={currentPath === '/' ? 'nav-link active' : 'nav-link'}>Home</Link>
                         </li>
                         <li className="nav-item">
+                            <Link to="/tasks/user"
+                                  className={currentPath === '/tasks/user' ? 'nav-link active' : 'nav-link'}>
+                                My Tasks
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to="/tasks/user/assigned"
+                                  className={currentPath === '/tasks/user/assigned' ? 'nav-link active' : 'nav-link'}>
+                                Assigned Tasks
+                            </Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link to="/tasks/user/completed"
+                                  className={currentPath === '/tasks/user/completed' ? 'nav-link active' : 'nav-link'}>
+                                Completed Tasks
+                            </Link>
+                        </li>
+                        <li className="nav-item">
                             <Link to="/tasks/create"
                                   className={currentPath === '/tasks/create' ? 'nav-link active' : 'nav-link'}>Create
                                 Task</Link>
-                        </li>
-                        <li className="nav-item">
-                            <Link to="/tasks"
-                                  className={currentPath === '/tasks' ? 'nav-link active' : 'nav-link'}>Tasks</Link>
                         </li>
                     </ul>
                     <div className="nav-item dropdown ms-auto">

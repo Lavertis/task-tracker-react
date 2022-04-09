@@ -10,8 +10,13 @@ const UserDropdown = (currentPath, email) => {
     return (
         <ul className="navbar-nav">
             <li className="nav-item dropdown">
-                <button className="btn shadow-none nav-link dropdown-toggle" id="navbarDropdownMenuLink"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                <button
+                    className={
+                        ['/account'].includes(currentPath) ?
+                            'btn shadow-none nav-link dropdown-toggle active' :
+                            'btn shadow-none nav-link dropdown-toggle'
+                    }
+                    id="navbarDropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
                     {email}
                 </button>
                 <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">

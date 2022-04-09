@@ -20,8 +20,7 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const url = "http://localhost:5000/api/users"
-            const {data: res} = await axios.post(url, data)
+            const {data: res} = await axios.post("users", data)
             navigate("/login")
             console.log(res.message)
         } catch (error) {

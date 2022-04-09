@@ -1,4 +1,4 @@
-import {axiosPrivate} from "../axios";
+import {axiosPrivate} from "../config/axios";
 import {useEffect} from "react";
 
 const useAxiosPrivate = () => {

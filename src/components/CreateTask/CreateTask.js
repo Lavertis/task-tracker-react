@@ -19,8 +19,7 @@ const CreateTask = () => {
     const handleSubmit = async (e) => {
         e.preventDefault()
         try {
-            const url = "http://localhost:5000/api/tasks"
-            const {data: res} = await axiosPrivate.post(url, data)
+            const {data: res} = await axiosPrivate.post("tasks", data)
             console.log(res)
             window.location = "/tasks"
         } catch (error) {
@@ -31,7 +30,8 @@ const CreateTask = () => {
     }
 
     return (
-        <div className="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3 mx-auto my-auto bg-light rounded-3 p-5 shadow">
+        <div
+            className="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-4 col-xxl-3 mx-auto my-auto bg-light rounded-3 p-5 shadow">
             {error && <div className="alert alert-danger text-center">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
