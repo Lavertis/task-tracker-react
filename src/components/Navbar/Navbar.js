@@ -25,6 +25,11 @@ const Navbar = () => {
                             <Link to="/" className={currentPath === '/' ? 'nav-link active' : 'nav-link'}>Home</Link>
                         </li>
                         <li className="nav-item">
+                            <Link to="/tasks/create"
+                                  className={currentPath === '/tasks/create' ? 'nav-link active' : 'nav-link'}>Create
+                                Task</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link to="/tasks"
                                   className={currentPath === '/tasks' ? 'nav-link active' : 'nav-link'}>Tasks</Link>
                         </li>

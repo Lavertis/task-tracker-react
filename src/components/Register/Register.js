@@ -25,18 +25,15 @@ const Register = () => {
             navigate("/login")
             console.log(res.message)
         } catch (error) {
-            if (
-                error.response &&
-                error.response.status >= 400 &&
-                error.response.status <= 500
-            ) {
+            if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
             }
         }
     }
 
     return (
-        <div className="col-11 col-sm-8 col-md-6 col-lg-4 col-xl-3 mx-auto my-auto bg-light rounded-3 p-5 shadow">
+        <div
+            className="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 mx-auto my-auto bg-light rounded-3 p-5 shadow">
             {error && <div className="alert alert-danger text-center">{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
