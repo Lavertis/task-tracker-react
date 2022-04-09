@@ -33,13 +33,13 @@ const Login = () => {
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
                     <label className="form-label">Email address</label>
-                    <input type="email" className="form-control" required
+                    <input type="email" name="email" className="form-control" required
                            onChange={handleChange} value={data.email}/>
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Password</label>
-                    <input type="password" className="form-control" required
+                    <input type="password" name="password" className="form-control" required
                            onChange={handleChange} value={data.password}/>
                 </div>
                 <div className="d-grid">
