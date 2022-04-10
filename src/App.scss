@@ -1,0 +1,11 @@
+body {
+  background-color: whitesmoke !important;
+}
+
+nav.navbar {
+  background-color: lightseagreen !important;
+}
+
+.navbar-nav > li > .dropdown-menu > li > .dropdown-item:active {
+  background-color: lightseagreen;
+}

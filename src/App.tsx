@@ -1,35 +1,34 @@
 import React from 'react';
-import './App.css';
-import {Navigate, Route, Routes} from "react-router-dom";
-import Register from "./components/Register/Register";
-import Login from "./components/Login/Login";
-import Home from "./components/Home/Home";
+import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
+import {Navigate, Route, Routes} from "react-router-dom";
 import Layout from "./components/Layout/Layout";
-import CreateTask from "./components/CreateTask/CreateTask";
-import UserTasks from "./components/TaskList/UserTasks";
+import Register from "./components/Register/Register";
 import EditTask from "./components/EditTask/EditTask";
+import Login from "./components/Login/Login";
+import Home from "./components/Home/Home";
+import CreateTask from "./components/CreateTask/CreateTask";
+import TaskList from "./components/TaskList/TaskList";
 
 function App() {
-    const user = localStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
     return (
         <Layout>
             <Routes>
-                {user && <Route path="/" element={<Home/>}/>}
-                <Route path="/" element={<Navigate replace to="/login"/>}/>
+                <Route path="/" element={<Home/>}/>
 
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
 
-                {user && <Route path="/tasks/create" element={<CreateTask/>}/>}
+                {token && <Route path="/tasks/create" element={<CreateTask/>}/>}
                 <Route path="/tasks/create" element={<Navigate replace to="/login"/>}/>
 
-                {user && <Route path="/tasks/user" element={<UserTasks/>}/>}
+                {token && <Route path="/tasks/user" element={<TaskList/>}/>}
                 <Route path="/tasks/user" element={<Navigate replace to="/login"/>}/>
 
-                {user && <Route path="/tasks/edit/:id" element={<EditTask/>}/>}
+                {token && <Route path="/tasks/edit/:id" element={<EditTask/>}/>}
                 <Route path="/tasks/edit/:id" element={<Navigate replace to="/login"/>}/>
             </Routes>
         </Layout>

@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {FC} from 'react';
 import {Link, useLocation} from "react-router-dom";
 
 
-const NavLink = ({to, text}) => {
+interface NavbarLinkProps {
+    to: string;
+    text: string;
+}
+
+const NavbarLink: FC<NavbarLinkProps> = ({to, text}) => {
     const location = useLocation();
     const currentPath = location.pathname;
     const isActive = currentPath === to;
@@ -17,8 +22,4 @@ const NavLink = ({to, text}) => {
     );
 }
 
-NavLink.propTypes = {};
-
-NavLink.defaultProps = {};
-
-export default NavLink;
+export default NavbarLink;

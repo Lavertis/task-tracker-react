@@ -1,18 +1,14 @@
-import React, {useEffect, useState} from 'react';
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
-import TaskListItem from "./TaskListItem";
+import React, {FC, useEffect, useState} from 'react';
+import {Task} from "../../types/Task";
+import TaskListItem from "../TaskListItem/TaskListItem";
+import axios from "../../api/axios";
 
 
-const UserTasks = () => {
-    const [tasks, setTasks] = useState([{
-        _id: 0,
-        title: '',
-        description: '',
-        completed: '',
-        createdAt: '',
-        updatedAt: ''
-    }]);
-    const axiosPrivate = useAxiosPrivate();
+interface TaskListProps {
+}
+
+const TaskList: FC<TaskListProps> = () => {
+    const [tasks, setTasks] = useState<Task[]>([]);
 
     useEffect(() => {
         let isMounted = true;
@@ -20,7 +16,7 @@ const UserTasks = () => {
 
         const fetchUserTasks = async () => {
             try {
-                const response = await axiosPrivate.get("tasks/auth", {
+                const response = await axios.get("tasks/auth", {
                     signal: controller.signal
                 });
                 isMounted && setTasks(response.data);
@@ -35,7 +31,7 @@ const UserTasks = () => {
             isMounted = false;
             controller.abort();
         }
-    }, [axiosPrivate]);
+    }, []);
 
     return (
         <div className="mt-5 col-11 col-sm-9 col-md-8 col-lg-7 col-xl-6 col-xxl-5 mx-auto">
@@ -48,8 +44,4 @@ const UserTasks = () => {
     );
 }
 
-UserTasks.propTypes = {};
-
-UserTasks.defaultProps = {};
-
-export default UserTasks;
+export default TaskList;

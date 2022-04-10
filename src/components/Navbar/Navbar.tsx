@@ -1,8 +1,12 @@
-import React from 'react';
-import UserDropdown from "./UserDropdown";
-import NavLink from "./NavLink";
+import React, {FC} from 'react';
+import NavbarLink from "../NavbarLink/NavbarLink";
+import NavbarUserDropdown from "../NavbarUserDropdown/NavbarUserDropdown";
 
-const Navbar = () => {
+
+interface NavbarProps {
+}
+
+const Navbar: FC<NavbarProps> = () => {
     const user = localStorage.getItem("token");
     const email = user ? JSON.parse(atob(user.split('.')[1])).email : null;
 
@@ -17,22 +21,22 @@ const Navbar = () => {
                 </button>
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav">
-                        <NavLink to="/" text="Home"/>
-                        <NavLink to="/tasks/user" text="My Tasks"/>
-                        <NavLink to="/tasks/user/assigned" text="Assigned Tasks"/>
-                        <NavLink to="/tasks/user/pending" text="Pending Tasks"/>
-                        <NavLink to="/tasks/user/completed" text="Completed Tasks"/>
-                        <NavLink to="/tasks/create" text="Create Task"/>
+                        <NavbarLink to="/" text="Home"/>
+                        <NavbarLink to="/tasks/user" text="My Tasks"/>
+                        <NavbarLink to="/tasks/user/assigned" text="Assigned Tasks"/>
+                        <NavbarLink to="/tasks/user/pending" text="Pending Tasks"/>
+                        <NavbarLink to="/tasks/user/completed" text="Completed Tasks"/>
+                        <NavbarLink to="/tasks/create" text="Create Task"/>
                     </ul>
                     <div className="nav-item dropdown ms-auto">
                         <ul className="navbar-nav">
                             {!user &&
                                 <>
-                                    <NavLink to="/login" text="Login"/>
-                                    <NavLink to="/register" text="Register"/>
+                                    <NavbarLink to="/login" text="Login"/>
+                                    <NavbarLink to="/register" text="Register"/>
                                 </>
                             }
-                            {user && UserDropdown(email)}
+                            {user && <NavbarUserDropdown email={email}/>}
                         </ul>
                     </div>
                 </div>
@@ -40,9 +44,5 @@ const Navbar = () => {
         </nav>
     );
 }
-
-Navbar.propTypes = {};
-
-Navbar.defaultProps = {};
 
 export default Navbar;

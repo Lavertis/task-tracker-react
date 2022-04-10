@@ -1,13 +1,18 @@
+import React, {FC} from 'react';
 import {Link, useLocation} from "react-router-dom";
-import React from "react";
 
-const UserDropdown = (email) => {
+
+interface NavbarUserDropdownProps {
+    email: string
+}
+
+const NavbarUserDropdown: FC<NavbarUserDropdownProps> = ({email}) => {
     const location = useLocation();
     const currentPath = location.pathname;
 
     const handleLogout = () => {
         localStorage.removeItem("token")
-        window.location.reload()
+        window.location.href = "/"
     }
 
     return (
@@ -25,10 +30,6 @@ const UserDropdown = (email) => {
             </ul>
         </li>
     );
-};
+}
 
-UserDropdown.propTypes = {};
-
-UserDropdown.defaultProps = {};
-
-export default UserDropdown;
+export default NavbarUserDropdown;

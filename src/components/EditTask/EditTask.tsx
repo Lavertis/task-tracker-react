@@ -1,10 +1,13 @@
-import React, {useEffect, useState} from 'react';
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import React, {FC, useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import moment from "moment";
+import axios from "../../api/axios";
 
 
-const EditTask = () => {
+interface EditTaskProps {
+}
+
+const EditTask: FC<EditTaskProps> = () => {
     const {id} = useParams();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -12,21 +15,20 @@ const EditTask = () => {
     const [completed, setCompleted] = useState(false);
     const [error, setError] = useState("")
 
-    const axiosPrivate = useAxiosPrivate();
     const navigate = useNavigate()
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const {data: res} = await axiosPrivate.put(`tasks/${id}`, {
+            const {data: res} = await axios.put(`tasks/${id}`, {
                 title,
                 description,
                 dueDate,
                 completed
             })
             console.log(res)
-            window.location = "/tasks/user"
-        } catch (error) {
+            navigate("/tasks/user")
+        } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
             }
@@ -39,7 +41,7 @@ const EditTask = () => {
 
         const fetchTask = async () => {
             try {
-                const response = await axiosPrivate.get(`tasks/${id}`, {
+                const response = await axios.get(`tasks/${id}`, {
                     signal: controller.signal
                 });
                 if (isMounted) {
@@ -47,9 +49,9 @@ const EditTask = () => {
                     console.log(data)
                     setTitle(data.title)
                     setDescription(data.description)
-                    let date = new Date(data.dueDate)
-                    date = moment(date).format("YYYY-MM-DDTkk:mm")
-                    setDueDate(date)
+                    const date = new Date(data.dueDate)
+                    const dateStr = moment(date).format("YYYY-MM-DDTkk:mm")
+                    setDueDate(dateStr)
                     setCompleted(data.completed)
                 }
             } catch (err) {
@@ -63,7 +65,7 @@ const EditTask = () => {
             isMounted = false;
             controller.abort();
         }
-    }, [axiosPrivate, id]);
+    }, [id]);
 
     return (
         <div
@@ -77,7 +79,7 @@ const EditTask = () => {
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Description</label>
-                    <textarea rows="3" name="description" className="form-control" required
+                    <textarea rows={3} name="description" className="form-control" required
                               onChange={(e) => setDescription(e.target.value)} value={description}/>
                 </div>
                 <div className="mb-3">
@@ -100,9 +102,5 @@ const EditTask = () => {
         </div>
     );
 }
-
-EditTask.propTypes = {};
-
-EditTask.defaultProps = {};
 
 export default EditTask;

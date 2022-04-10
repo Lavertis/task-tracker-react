@@ -1,29 +1,25 @@
-import React, {useState} from 'react';
-import axios from "axios";
-import {useNavigate} from "react-router-dom";
+import React, {FC, useState} from 'react';
+import axios from "../../api/axios";
 
 
-const Register = () => {
-    const [data, setData] = useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-    })
+interface LoginProps {
+}
+
+const Login: FC<LoginProps> = () => {
+    const [data, setData] = useState({email: "", password: ""})
     const [error, setError] = useState("")
-    const navigate = useNavigate()
 
-    const handleChange = ({currentTarget: input}) => {
+    const handleChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
         setData({...data, [input.name]: input.value})
-    }
+    };
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const {data: res} = await axios.post("users", data)
-            navigate("/login")
-            console.log(res.message)
-        } catch (error) {
+            const {data: res} = await axios.post("auth", data)
+            localStorage.setItem("token", res.data)
+            window.location.href = "/"
+        } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
             }
@@ -42,30 +38,16 @@ const Register = () => {
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
-                    <label className="form-label">First name</label>
-                    <input type="text" name="firstName" className="form-control" required
-                           onChange={handleChange} value={data.firstName}/>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Last name</label>
-                    <input type="text" name="lastName" className="form-control" required
-                           onChange={handleChange} value={data.lastName}/>
-                </div>
-                <div className="mb-3">
                     <label className="form-label">Password</label>
                     <input type="password" name="password" className="form-control" required
                            onChange={handleChange} value={data.password}/>
                 </div>
                 <div className="d-grid">
-                    <button type="submit" className="btn btn-primary">Register</button>
+                    <button type="submit" className="btn btn-primary">Login</button>
                 </div>
             </form>
         </div>
     );
-};
+}
 
-Register.propTypes = {};
-
-Register.defaultProps = {};
-
-export default Register;
+export default Login;

@@ -1,16 +1,16 @@
-import React from 'react';
+import React, {FC, ReactNode} from 'react';
 import Navbar from "../Navbar/Navbar";
 
 
-const Layout = ({children}) => (
+interface LayoutProps {
+    children: ReactNode
+}
+
+const Layout: FC<LayoutProps> = ({children}) => (
     <div className="d-flex flex-column min-vh-100">
         <Navbar/>
         <>{children}</>
     </div>
 );
-
-Layout.propTypes = {};
-
-Layout.defaultProps = {};
 
 export default Layout;

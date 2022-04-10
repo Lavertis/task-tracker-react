@@ -1,21 +1,32 @@
-import React, {useState} from 'react';
-import instance from '../../config/axios';
+import React, {FC, useState} from 'react';
+import {useNavigate} from "react-router-dom";
+import axios from "../../api/axios";
 
-const Login = () => {
-    const [data, setData] = useState({email: "", password: ""})
+
+interface RegisterProps {
+}
+
+const Register: FC<RegisterProps> = () => {
+    const [data, setData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        password: "",
+    })
     const [error, setError] = useState("")
+    const navigate = useNavigate()
 
-    const handleChange = ({currentTarget: input}) => {
+    const handleChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement>) => {
         setData({...data, [input.name]: input.value})
-    };
+    }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const {data: res} = await instance.post("auth", data)
-            localStorage.setItem("token", res.data)
-            window.location = "/"
-        } catch (error) {
+            const {data: res} = await axios.post("users", data)
+            navigate("/login")
+            console.log(res.message)
+        } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
             }
@@ -34,20 +45,26 @@ const Login = () => {
                     <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
                 </div>
                 <div className="mb-3">
+                    <label className="form-label">First name</label>
+                    <input type="text" name="firstName" className="form-control" required
+                           onChange={handleChange} value={data.firstName}/>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label">Last name</label>
+                    <input type="text" name="lastName" className="form-control" required
+                           onChange={handleChange} value={data.lastName}/>
+                </div>
+                <div className="mb-3">
                     <label className="form-label">Password</label>
                     <input type="password" name="password" className="form-control" required
                            onChange={handleChange} value={data.password}/>
                 </div>
                 <div className="d-grid">
-                    <button type="submit" className="btn btn-primary">Login</button>
+                    <button type="submit" className="btn btn-primary">Register</button>
                 </div>
             </form>
         </div>
     );
-};
+}
 
-Login.propTypes = {};
-
-Login.defaultProps = {};
-
-export default Login;
+export default Register;

@@ -1,8 +1,11 @@
-import React, {useState} from 'react';
-import useAxiosPrivate from "../../hooks/useAxiosPrivate";
+import React, {FC, useState} from 'react';
+import axios from '../../api/axios';
+import {useNavigate} from "react-router-dom";
 
+interface CreateTaskProps {
+}
 
-const CreateTask = () => {
+const CreateTask: FC<CreateTaskProps> = () => {
     const [data, setData] = useState({
         title: "",
         description: "",
@@ -11,19 +14,19 @@ const CreateTask = () => {
     })
     const [error, setError] = useState("")
 
-    const handleChange = ({currentTarget: input}) => {
+    const navigate = useNavigate()
+
+    const handleChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
         setData({...data, [input.name]: input.value})
     };
 
-    const axiosPrivate = useAxiosPrivate();
-
-    const handleSubmit = async (e) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const {data: res} = await axiosPrivate.post("tasks", data)
+            const {data: res} = await axios.post("tasks", data)
             console.log(res)
-            window.location = "/tasks/user"
-        } catch (error) {
+            navigate("/tasks/user")
+        } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
             }
@@ -42,7 +45,7 @@ const CreateTask = () => {
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Description</label>
-                    <textarea rows="3" name="description" className="form-control" required
+                    <textarea rows={3} name="description" className="form-control" required
                               onChange={handleChange} value={data.description}/>
                 </div>
                 <div className="mb-3">
@@ -57,9 +60,5 @@ const CreateTask = () => {
         </div>
     );
 }
-
-CreateTask.propTypes = {};
-
-CreateTask.defaultProps = {};
 
 export default CreateTask;

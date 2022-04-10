@@ -1,8 +1,16 @@
-import React from 'react';
-import {axiosPrivate} from "../../config/axios";
+import React, {FC} from 'react';
+import {Task} from "../../types/Task";
+import axios from "../../api/axios";
+import {useNavigate} from "react-router-dom";
 
 
-const TaskListItem = ({task}) => {
+interface TaskListItemProps {
+    task: Task
+}
+
+const TaskListItem: FC<TaskListItemProps> = ({task}) => {
+    const navigate = useNavigate()
+
     const dateOptions = {
         weekday: 'long',
         year: 'numeric',
@@ -10,16 +18,17 @@ const TaskListItem = ({task}) => {
         day: 'numeric',
         hour: 'numeric',
         minute: 'numeric'
-    };
+    } as const;
     const dueDate = new Date(task.dueDate);
     const dueDateString = dueDate.toLocaleDateString('en-US', dateOptions);
 
-    const handleDelete = async () => {
+    const handleDelete = async (e: React.FormEvent) => {
+        e.preventDefault()
         try {
-            const {data: res} = await axiosPrivate.delete(`tasks/${task._id}`)
+            const {data: res} = await axios.delete(`tasks/${task._id}`)
             console.log(res)
-            window.location = "/tasks/user"
-        } catch (error) {
+            navigate("/tasks/user")
+        } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 console.log(error.response.data.message)
             }
@@ -27,7 +36,7 @@ const TaskListItem = ({task}) => {
     }
 
     const goToEdit = () => {
-        window.location = `/tasks/edit/${task._id}`
+        navigate(`/tasks/edit/${task._id}`)
     }
 
     return (
@@ -46,9 +55,5 @@ const TaskListItem = ({task}) => {
         </div>
     );
 }
-
-TaskListItem.propTypes = {};
-
-TaskListItem.defaultProps = {};
 
 export default TaskListItem;
