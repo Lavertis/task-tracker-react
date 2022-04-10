@@ -7,6 +7,7 @@ const CreateTask = () => {
         title: "",
         description: "",
         dueDate: "",
+        completed: false
     })
     const [error, setError] = useState("")
 
@@ -46,7 +47,7 @@ const CreateTask = () => {
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Due Date</label>
-                    <input type="date" name="dueDate" className="form-control" required
+                    <input type="datetime-local" name="dueDate" className="form-control" required
                            onChange={handleChange} value={data.dueDate}/>
                 </div>
                 <div className="d-grid">

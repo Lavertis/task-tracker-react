@@ -9,6 +9,7 @@ import 'bootstrap/dist/js/bootstrap.js';
 import Layout from "./components/Layout/Layout";
 import CreateTask from "./components/CreateTask/CreateTask";
 import UserTasks from "./components/TaskList/UserTasks";
+import EditTask from "./components/EditTask/EditTask";
 
 function App() {
     const user = localStorage.getItem("token")
@@ -27,6 +28,9 @@ function App() {
 
                 {user && <Route path="/tasks/user" element={<UserTasks/>}/>}
                 <Route path="/tasks/user" element={<Navigate replace to="/login"/>}/>
+
+                {user && <Route path="/tasks/edit/:id" element={<EditTask/>}/>}
+                <Route path="/tasks/edit/:id" element={<Navigate replace to="/login"/>}/>
             </Routes>
         </Layout>
     );

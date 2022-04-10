@@ -20,7 +20,7 @@ const UserTasks = () => {
 
         const fetchUserTasks = async () => {
             try {
-                const response = await axiosPrivate.get("tasks/user", {
+                const response = await axiosPrivate.get("tasks/auth", {
                     signal: controller.signal
                 });
                 isMounted && setTasks(response.data);

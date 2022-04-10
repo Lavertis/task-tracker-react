@@ -14,9 +14,9 @@ const TaskListItem = ({task}) => {
     const dueDate = new Date(task.dueDate);
     const dueDateString = dueDate.toLocaleDateString('en-US', dateOptions);
 
-    const handleDelete = async (id) => {
+    const handleDelete = async () => {
         try {
-            const {data: res} = await axiosPrivate.delete(`tasks/${id}`)
+            const {data: res} = await axiosPrivate.delete(`tasks/${task._id}`)
             console.log(res)
             window.location = "/tasks/user"
         } catch (error) {
@@ -26,6 +26,10 @@ const TaskListItem = ({task}) => {
         }
     }
 
+    const goToEdit = () => {
+        window.location = `/tasks/edit/${task._id}`
+    }
+
     return (
         <div className="card my-2" data-id={task._id}>
             <h5 className="card-header">{dueDateString}</h5>
@@ -33,8 +37,8 @@ const TaskListItem = ({task}) => {
                 <h5 className="card-title">{task.title}</h5>
                 <p className="card-text">{task.description}</p>
                 <div className="d-flex justify-content-end">
-                    <button className="btn btn-outline-primary me-2">Edit task</button>
-                    <button className="btn btn-outline-danger" onClick={() => handleDelete(task._id)}>
+                    <button className="btn btn-outline-primary me-2" onClick={goToEdit}>Edit task</button>
+                    <button className="btn btn-outline-danger" onClick={handleDelete}>
                         Delete task
                     </button>
                 </div>

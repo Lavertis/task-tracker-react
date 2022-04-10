@@ -20,6 +20,7 @@ const Navbar = () => {
                         <NavLink to="/" text="Home"/>
                         <NavLink to="/tasks/user" text="My Tasks"/>
                         <NavLink to="/tasks/user/assigned" text="Assigned Tasks"/>
+                        <NavLink to="/tasks/user/pending" text="Pending Tasks"/>
                         <NavLink to="/tasks/user/completed" text="Completed Tasks"/>
                         <NavLink to="/tasks/create" text="Create Task"/>
                     </ul>
