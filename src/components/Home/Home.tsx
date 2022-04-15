@@ -6,7 +6,7 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = () => (
-    <div className="mx-auto mt-5 text-center">
+    <div className="mx-auto mb-auto text-center">
         <h1 className="mb-4">Task Tracker</h1>
         <p>Welcome to the Task Tracker!</p>
         <p>
@@ -14,7 +14,7 @@ const Home: FC<HomeProps> = () => (
             but also assign them to other users.
         </p>
         <p>To get started, click the "Add Task" button below.</p>
-        <Link to="/tasks/create" className="btn btn-crimson mt-2">Add Task</Link>
+        <Link to="/tasks/create" className="btn btn-theme mt-2">Add Task</Link>
     </div>
 );
 

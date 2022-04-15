@@ -34,7 +34,7 @@ const TaskList: FC<TaskListProps> = () => {
     }, []);
 
     return (
-        <div className="col-11 col-sm-9 col-md-8 col-lg-7 col-xl-6 col-xxl-5 mx-auto">
+        <div className="col-11 col-sm-9 col-md-8 col-lg-7 col-xl-6 col-xxl-5 mx-auto mb-auto">
             {
                 tasks.map(task => (
                     <TaskListItem key={task._id} task={task}/>

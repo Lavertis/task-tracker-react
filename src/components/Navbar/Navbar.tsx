@@ -11,7 +11,7 @@ const Navbar: FC<NavbarProps> = () => {
     const email = user ? JSON.parse(atob(user.split('.')[1])).email : null;
 
     return (
-        <nav className="navbar navbar-expand-lg navbar-dark bg-light">
+        <nav className="navbar navbar-expand-lg navbar-dark bg-light mb-5">
             <div className="container-fluid">
                 <span className="navbar-brand">Task Tracker</span>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" aria-expanded="false"
