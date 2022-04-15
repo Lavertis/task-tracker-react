@@ -27,7 +27,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task}) => {
         try {
             const {data: res} = await axios.delete(`tasks/${task._id}`)
             console.log(res)
-            navigate("/tasks/user")
+            navigate("/tasks/user/all")
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 console.log(error.response.data.message)

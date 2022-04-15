@@ -10,29 +10,32 @@ const CreateTask: FC<CreateTaskProps> = () => {
     const token = localStorage.getItem("token");
     const currentUserEmail = token ? JSON.parse(atob(token.split('.')[1])).email : null;
 
-    const [data, setData] = useState({
-        title: "",
-        description: "",
-        dueDate: "",
-        assignedTo: [],
-    })
     const [assignableUserEmails, setAssignableUserEmails] = useState<string[]>([])
-    const amIAJokeToYou: Array<string> = [currentUserEmail]
-    const [assignedUserEmails, setAssignedUserEmails] = useState<Set<string>>(new Set(amIAJokeToYou))
+
     const [searchText, setSearchText] = useState('')
     const [error, setError] = useState("")
     const navigate = useNavigate()
 
-    const handleChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setData({...data, [input.name]: input.value})
-    };
+    const [title, setTitle] = useState('')
+    const [description, setDescription] = useState('')
+    const [dueDate, setDueDate] = useState('')
+    const [assignedTo, setAssignedTo] = useState<Set<string>>(new Set())
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        const data = {
+            title,
+            description,
+            dueDate,
+            assignedTo: Array.from(assignedTo)
+        }
+
         try {
+            console.log(data)
             const res = await axios.post("tasks", data)
             console.log(res)
-            navigate("/tasks/user")
+            navigate("/tasks/user/all")
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
@@ -49,7 +52,7 @@ const CreateTask: FC<CreateTaskProps> = () => {
         try {
             const url = `users/search/${searchText}`
             const res = await axios.get(url)
-            const emails = res.data.map((user: User) => user.email).filter((email: string) => !assignedUserEmails.has(email))
+            const emails = res.data.map((user: User) => user.email).filter((email: string) => !assignedTo.has(email))
             setAssignableUserEmails(emails)
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
@@ -61,23 +64,28 @@ const CreateTask: FC<CreateTaskProps> = () => {
     const removeEmailFromAssignedUserEmails = (e: React.MouseEvent, email: string) => {
         e.preventDefault()
 
-        const newAssigned = new Set(new Set(Array.from(assignedUserEmails.values()).filter((u: string) => u !== email)))
-        setAssignedUserEmails(newAssigned)
+        const newAssigned = new Set(new Set(Array.from(assignedTo.values()).filter((u: string) => u !== email)))
+        setAssignedTo(newAssigned)
     }
 
     const addEmailToAssignedUserEmails = (e: React.MouseEvent, email: string) => {
         e.preventDefault()
 
-        const newAssignedUserEmails = new Set([...Array.from(assignedUserEmails.values()), email])
-        setAssignedUserEmails(newAssignedUserEmails)
+        const newAssignedUserEmails = new Set([...Array.from(assignedTo.values()), email])
+        setAssignedTo(newAssignedUserEmails)
 
         const newAssignableUserEmails = assignableUserEmails.filter((u: string) => u !== email)
         setAssignableUserEmails(newAssignableUserEmails)
     }
 
     useEffect(() => {
+        const currentUser: Array<string> = [currentUserEmail]
+        setAssignedTo(new Set(currentUser))
+    }, [])
+
+    useEffect(() => {
         handleUserSearch()
-    }, [assignedUserEmails])
+    }, [assignedTo])
 
     useEffect(() => {
         handleUserSearch()
@@ -91,23 +99,23 @@ const CreateTask: FC<CreateTaskProps> = () => {
                 <div className="mb-3">
                     <label className="form-label">Title</label>
                     <input type="text" name="title" className="form-control" required placeholder="Title"
-                           onChange={handleChange} value={data.title}/>
+                           onChange={(e) => setTitle(e.target.value)} value={title}/>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Description</label>
                     <textarea rows={3} name="description" className="form-control" required placeholder="Description"
-                              onChange={handleChange} value={data.description}/>
+                              onChange={(e) => setDescription(e.target.value)} value={description}/>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Due Date</label>
                     <input type="datetime-local" name="dueDate" className="form-control" required
-                           onChange={handleChange} value={data.dueDate}/>
+                           onChange={(e) => setDueDate(e.target.value)} value={dueDate}/>
                 </div>
                 <fieldset className="border p-3 mb-3">
                     <legend className="float-none w-auto ps-2 fw-light m-0">Assign to</legend>
                     <div className="mb-3">
                         {
-                            Array.from(assignedUserEmails.values()).map((email: string) => {
+                            Array.from(assignedTo.values()).map((email: string) => {
                                 return (
                                     <div key={email} className="d-flex justify-content-between mb-1">
                                         <span
@@ -122,7 +130,7 @@ const CreateTask: FC<CreateTaskProps> = () => {
                         }
                     </div>
                     <div className="mb-3">
-                        <input type="text" className="form-control" required value={searchText}
+                        <input type="text" className="form-control" value={searchText}
                                onChange={(e) => setSearchText(e.target.value)}
                                placeholder="User's email address"/>
                     </div>
