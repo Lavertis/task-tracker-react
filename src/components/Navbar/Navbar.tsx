@@ -22,10 +22,10 @@ const Navbar: FC<NavbarProps> = () => {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav">
                         <NavbarLink to="/" text="Home"/>
-                        <NavbarLink to="/tasks/user" text="My Tasks"/>
-                        <NavbarLink to="/tasks/user/assigned" text="Assigned Tasks"/>
-                        <NavbarLink to="/tasks/user/pending" text="Pending Tasks"/>
-                        <NavbarLink to="/tasks/user/completed" text="Completed Tasks"/>
+                        <NavbarLink to="/tasks/user/all" text="My Tasks"/>
+                        <NavbarLink to="/tasks/user/orders" text="Task Orders"/>
+                        {/*<NavbarLink to="/tasks/user/pending" text="Pending Tasks"/>*/}
+                        {/*<NavbarLink to="/tasks/user/completed" text="Completed Tasks"/>*/}
                         <NavbarLink to="/tasks/create" text="Create Task"/>
                     </ul>
                     <div className="nav-item dropdown ms-auto">

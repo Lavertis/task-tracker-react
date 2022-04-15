@@ -27,7 +27,7 @@ const EditTask: FC<EditTaskProps> = () => {
                 completed
             })
             console.log(res)
-            navigate("/tasks/user")
+            navigate("/tasks/user/all")
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
@@ -94,7 +94,7 @@ const EditTask: FC<EditTaskProps> = () => {
                 </div>
                 <div className="d-grid">
                     <button type="submit" className="btn btn-success mb-2">Save</button>
-                    <button className="btn btn-secondary" type="button" onClick={() => navigate('/tasks/user')}>
+                    <button className="btn btn-secondary" type="button" onClick={() => navigate('/tasks/user/all')}>
                         Cancel
                     </button>
                 </div>

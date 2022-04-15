@@ -14,7 +14,7 @@ const Home: FC<HomeProps> = () => (
             but also assign them to other users.
         </p>
         <p>To get started, click the "Add Task" button below.</p>
-        <Link to="/tasks/create" className="btn btn-primary mt-2">Add Task</Link>
+        <Link to="/tasks/create" className="btn btn-crimson mt-2">Add Task</Link>
     </div>
 );
 

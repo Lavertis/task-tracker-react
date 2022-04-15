@@ -1,11 +1,26 @@
+$theme-color: lightseagreen;
+
 body {
   background-color: whitesmoke !important;
 }
 
 nav.navbar {
-  background-color: lightseagreen !important;
+  background-color: $theme-color !important;
 }
 
 .navbar-nav > li > .dropdown-menu > li > .dropdown-item:active {
-  background-color: lightseagreen;
+  background-color: $theme-color;
+}
+
+.bg-crimson {
+  background-color: $theme-color !important;
+}
+
+.btn-crimson {
+  background-color: $theme-color !important;
+  color: white !important;
+}
+
+.btn-crimson:focus {
+  box-shadow: 0 0 0 0.25rem rgba($theme-color, 0.25) !important;
 }

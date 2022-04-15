@@ -25,8 +25,8 @@ function App() {
                 {token && <Route path="/tasks/create" element={<CreateTask/>}/>}
                 <Route path="/tasks/create" element={<Navigate replace to="/login"/>}/>
 
-                {token && <Route path="/tasks/user" element={<TaskList/>}/>}
-                <Route path="/tasks/user" element={<Navigate replace to="/login"/>}/>
+                {token && <Route path="/tasks/user/all" element={<TaskList/>}/>}
+                <Route path="/tasks/user/all" element={<Navigate replace to="/login"/>}/>
 
                 {token && <Route path="/tasks/edit/:id" element={<EditTask/>}/>}
                 <Route path="/tasks/edit/:id" element={<Navigate replace to="/login"/>}/>

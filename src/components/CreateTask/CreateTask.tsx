@@ -10,7 +10,6 @@ const CreateTask: FC<CreateTaskProps> = () => {
         title: "",
         description: "",
         dueDate: "",
-        completed: false
     })
     const [error, setError] = useState("")
 
