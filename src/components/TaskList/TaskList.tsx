@@ -9,35 +9,31 @@ interface TaskListProps {
 
 const TaskList: FC<TaskListProps> = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
+    const deleteTask = (id: string) => {
+        axios.delete(`/tasks/${id}`)
+            .then(() => {
+                setTasks(tasks.filter(task => task._id !== id));
+            });
+    };
 
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-
         const fetchUserTasks = async () => {
             try {
-                const response = await axios.get("tasks/auth/all", {
-                    signal: controller.signal
-                });
-                isMounted && setTasks(response.data);
+                const response = await axios.get("tasks/auth/all");
+                setTasks(response.data);
             } catch (err) {
-
+                console.log(err);
             }
         }
 
         fetchUserTasks()
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }
     }, []);
 
     return (
         <div className="col-11 col-sm-9 col-md-8 col-lg-7 col-xl-6 col-xxl-5 mx-auto mb-auto">
             {
                 tasks.map(task => (
-                    <TaskListItem key={task._id} task={task}/>
+                    <TaskListItem key={task._id} task={task} deleteTask={deleteTask}/>
                 ))
             }
         </div>

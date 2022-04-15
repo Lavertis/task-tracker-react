@@ -7,8 +7,8 @@ interface NavbarProps {
 }
 
 const Navbar: FC<NavbarProps> = () => {
-    const user = localStorage.getItem("token");
-    const email = user ? JSON.parse(atob(user.split('.')[1])).email : null;
+    const token = localStorage.getItem("token");
+    const email = token ? JSON.parse(atob(token.split('.')[1])).email : null;
 
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-light mb-5">
@@ -23,20 +23,17 @@ const Navbar: FC<NavbarProps> = () => {
                     <ul className="navbar-nav">
                         <NavbarLink to="/" text="Home"/>
                         <NavbarLink to="/tasks/user/all" text="My Tasks"/>
-                        <NavbarLink to="/tasks/user/orders" text="Task Orders"/>
-                        {/*<NavbarLink to="/tasks/user/pending" text="Pending Tasks"/>*/}
-                        {/*<NavbarLink to="/tasks/user/completed" text="Completed Tasks"/>*/}
                         <NavbarLink to="/tasks/create" text="Create Task"/>
                     </ul>
                     <div className="nav-item dropdown ms-auto">
                         <ul className="navbar-nav">
-                            {!user &&
+                            {!token &&
                                 <>
                                     <NavbarLink to="/login" text="Login"/>
                                     <NavbarLink to="/register" text="Register"/>
                                 </>
                             }
-                            {user && <NavbarUserDropdown email={email}/>}
+                            {token && <NavbarUserDropdown email={email}/>}
                         </ul>
                     </div>
                 </div>

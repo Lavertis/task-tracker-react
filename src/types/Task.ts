@@ -4,8 +4,7 @@ export interface Task {
     description: string,
     dueDate: string,
     completed: boolean,
-    owner: string,
-    assignedTo: Array<string>,
+    userId: string,
     createdAt: Date,
     updatedAt: Date,
 }

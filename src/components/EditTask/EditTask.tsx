@@ -26,7 +26,6 @@ const EditTask: FC<EditTaskProps> = () => {
                 dueDate,
                 completed
             })
-            console.log(res)
             navigate("/tasks/user/all")
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
