@@ -6,23 +6,27 @@ interface CreateTaskProps {
 }
 
 const CreateTask: FC<CreateTaskProps> = () => {
-    const [data, setData] = useState({
-        title: "",
-        description: "",
-        dueDate: "",
+    const navigate = useNavigate()
+    const [task, setTask] = useState({
+        title: '',
+        description: '',
+        priority: 1,
+        dueDate: ''
     })
     const [error, setError] = useState("")
 
-    const navigate = useNavigate()
+    const handlePriorityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTask({...task, priority: parseInt(e.target.value)})
+    }
 
-    const handleChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setData({...data, [input.name]: input.value})
+    const handleTextChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>) => {
+        setTask({...task, [input.name]: input.value})
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const {data: res} = await axios.post("tasks", data)
+            const {data: res} = await axios.post("tasks", task)
             console.log(res)
             navigate("/tasks/user/all")
         } catch (error: any) {
@@ -40,17 +44,33 @@ const CreateTask: FC<CreateTaskProps> = () => {
                 <div className="mb-3">
                     <label className="form-label">Title</label>
                     <input type="text" name="title" className="form-control" required
-                           onChange={handleChange} value={data.title}/>
+                           onChange={handleTextChange} value={task.title}/>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Description</label>
                     <textarea rows={3} name="description" className="form-control" required
-                              onChange={handleChange} value={data.description}/>
+                              onChange={handleTextChange} value={task.description}/>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Due Date</label>
                     <input type="datetime-local" name="dueDate" className="form-control" required
-                           onChange={handleChange} value={data.dueDate}/>
+                           onChange={handleTextChange} value={task.dueDate}/>
+                </div>
+                <div className="mb-3">
+                    <label className="form-label d-block">Priority</label>
+                    <div className="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" className="btn-check" name="priority" id="radio-priority-1" value={1}
+                               autoComplete="off" onChange={handlePriorityChange} checked={task.priority === 1}/>
+                        <label className="btn btn-outline-primary" htmlFor="radio-priority-1">Low</label>
+
+                        <input type="radio" className="btn-check" name="priority" id="radio-priority-2" value={2}
+                               autoComplete="off" onChange={handlePriorityChange} checked={task.priority === 2}/>
+                        <label className="btn btn-outline-primary" htmlFor="radio-priority-2">Medium</label>
+
+                        <input type="radio" className="btn-check" name="priority" id="radio-priority-3" value={3}
+                               autoComplete="off" onChange={handlePriorityChange} checked={task.priority === 3}/>
+                        <label className="btn btn-outline-primary" htmlFor="radio-priority-3">High</label>
+                    </div>
                 </div>
                 <div className="d-grid">
                     <button type="submit" className="btn btn-primary">Create Task</button>

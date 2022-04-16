@@ -6,9 +6,10 @@ import {useNavigate} from "react-router-dom";
 interface TaskListItemProps {
     task: Task
     deleteTask: (id: string) => void
+    markAsCompleted: (id: string) => void
 }
 
-const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask}) => {
+const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, markAsCompleted}) => {
     const navigate = useNavigate()
 
     const dateOptions = {
@@ -42,19 +43,26 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask}) => {
     }
 
     return (
-        <div className={"card my-2"} data-id={task._id}>
+        <div className="card my-2" data-id={task._id}>
             <h5 className="card-header">{dueDateString}</h5>
             <div className="card-body">
                 <h5 className="card-title">{task.title}</h5>
                 <p className="card-text">{task.description}</p>
-                <div className="d-flex justify-content-between">
-                    <div className="my-auto">
+                <div className="d-flex flex-column flex-sm-row justify-content-between">
+                    <div className="mb-3 mx-auto mx-sm-0 my-sm-auto">
                         {getStatus()}
                     </div>
-                    <div>
-                        <button className="btn btn-outline-primary me-2" onClick={goToEdit}>Edit task</button>
+                    <div className="mx-auto mx-sm-0">
+                        {task.completed ? '' :
+                            <button className="btn btn-outline-success me-2" onClick={() => markAsCompleted(task._id)}>
+                                <i className="fa-solid fa-check"></i>
+                            </button>
+                        }
+                        <button className="btn btn-outline-primary me-2" onClick={goToEdit}>
+                            <i className="fa-solid fa-edit"></i>
+                        </button>
                         <button className="btn btn-outline-danger" onClick={() => deleteTask(task._id)}>
-                            Delete task
+                            <i className="fa-solid fa-trash"></i>
                         </button>
                     </div>
                 </div>

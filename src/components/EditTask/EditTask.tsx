@@ -9,23 +9,28 @@ interface EditTaskProps {
 
 const EditTask: FC<EditTaskProps> = () => {
     const {id} = useParams();
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [dueDate, setDueDate] = useState('');
-    const [completed, setCompleted] = useState(false);
+    const navigate = useNavigate()
+    const [task, setTask] = useState({
+        title: '',
+        description: '',
+        priority: 0,
+        completed: false,
+        dueDate: ''
+    });
     const [error, setError] = useState("")
 
-    const navigate = useNavigate()
+    const handleTextChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement> | React.FormEvent<HTMLTextAreaElement>) => {
+        setTask({...task, [input.name]: input.value})
+    }
+
+    const handlePriorityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setTask({...task, priority: parseInt(e.target.value)})
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
         try {
-            const {data: res} = await axios.put(`tasks/${id}`, {
-                title,
-                description,
-                dueDate,
-                completed
-            })
+            await axios.put(`tasks/${id}`, task)
             navigate("/tasks/user/all")
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
@@ -35,35 +40,19 @@ const EditTask: FC<EditTaskProps> = () => {
     }
 
     useEffect(() => {
-        let isMounted = true;
-        const controller = new AbortController();
-
         const fetchTask = async () => {
-            try {
-                const response = await axios.get(`tasks/${id}`, {
-                    signal: controller.signal
-                });
-                if (isMounted) {
-                    const data = response.data
-                    console.log(data)
-                    setTitle(data.title)
-                    setDescription(data.description)
-                    const date = new Date(data.dueDate)
-                    const dateStr = moment(date).format("YYYY-MM-DDTkk:mm")
-                    setDueDate(dateStr)
-                    setCompleted(data.completed)
-                }
-            } catch (err) {
-
+            const response = await axios.get(`tasks/${id}`);
+            const data = response.data
+            const task = {
+                title: data.title,
+                description: data.description,
+                completed: data.completed,
+                priority: data.priority,
+                dueDate: moment(data.dueDate).format("YYYY-MM-DDTkk:mm"),
             }
+            setTask(task)
         }
-
         fetchTask()
-
-        return () => {
-            isMounted = false;
-            controller.abort();
-        }
     }, [id]);
 
     return (
@@ -74,22 +63,41 @@ const EditTask: FC<EditTaskProps> = () => {
                 <div className="mb-3">
                     <label className="form-label">Title</label>
                     <input type="text" name="title" className="form-control" required
-                           onChange={(e) => setTitle(e.target.value)} value={title}/>
+                           onChange={handleTextChange} value={task.title}/>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Description</label>
                     <textarea rows={3} name="description" className="form-control" required
-                              onChange={(e) => setDescription(e.target.value)} value={description}/>
+                              onChange={handleTextChange} value={task.description}/>
                 </div>
                 <div className="mb-3">
                     <label className="form-label">Due Date</label>
                     <input type="datetime-local" name="dueDate" className="form-control" required
-                           onChange={(e) => setDueDate(e.target.value)} value={dueDate}/>
+                           onChange={handleTextChange} value={task.dueDate}/>
                 </div>
-                <div className="form-check form-switch mb-3">
-                    <label className="form-check-label" htmlFor="flexSwitchCheckDefault">Completed</label>
-                    <input className="form-check-input" type="checkbox"
-                           onChange={(e) => setCompleted(e.target.checked)} checked={completed}/>
+                <div className="mb-3">
+                    <label className="form-label d-block">Priority</label>
+                    <div className="btn-group d-flex" role="group" aria-label="Basic radio toggle button group">
+                        <input type="radio" className="btn-check" name="priority" id="radio-priority-1" value={1}
+                               autoComplete="off" onChange={handlePriorityChange} checked={task.priority === 1}/>
+                        <label className="btn btn-outline-primary" htmlFor="radio-priority-1">Low</label>
+
+                        <input type="radio" className="btn-check" name="priority" id="radio-priority-2" value={2}
+                               autoComplete="off" onChange={handlePriorityChange} checked={task.priority === 2}/>
+                        <label className="btn btn-outline-primary" htmlFor="radio-priority-2">Medium</label>
+
+                        <input type="radio" className="btn-check" name="priority" id="radio-priority-3" value={3}
+                               autoComplete="off" onChange={handlePriorityChange} checked={task.priority === 3}/>
+                        <label className="btn btn-outline-primary" htmlFor="radio-priority-3">High</label>
+                    </div>
+                </div>
+                <div className="mb-3 d-flex justify-content-center">
+                    <div className="form-check form-switch">
+                        <label className="form-check-label">Completed</label>
+                        <input className="form-check-input" type="checkbox" checked={task.completed}
+                               onChange={(e) =>
+                                   setTask({...task, completed: Boolean(e.target.checked)})}/>
+                    </div>
                 </div>
                 <div className="d-grid">
                     <button type="submit" className="btn btn-success mb-2">Save</button>

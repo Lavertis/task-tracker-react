@@ -16,6 +16,18 @@ const TaskList: FC<TaskListProps> = () => {
             });
     };
 
+    const markAsCompleted = (id: string) => {
+        axios.patch(`/tasks/${id}`, {completed: true})
+            .then(() => {
+                setTasks(tasks.map(task => {
+                    if (task._id === id) {
+                        task.completed = true;
+                    }
+                    return task;
+                }));
+            });
+    };
+
     useEffect(() => {
         const fetchUserTasks = async () => {
             try {
@@ -33,7 +45,12 @@ const TaskList: FC<TaskListProps> = () => {
         <div className="col-11 col-sm-9 col-md-8 col-lg-7 col-xl-6 col-xxl-5 mx-auto mb-auto">
             {
                 tasks.map(task => (
-                    <TaskListItem key={task._id} task={task} deleteTask={deleteTask}/>
+                    <TaskListItem
+                        key={task._id}
+                        task={task}
+                        deleteTask={deleteTask}
+                        markAsCompleted={markAsCompleted}
+                    />
                 ))
             }
         </div>
