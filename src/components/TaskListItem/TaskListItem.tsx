@@ -1,7 +1,8 @@
 import React, {FC} from 'react';
 import {Task} from "../../types/Task";
 import {useNavigate} from "react-router-dom";
-
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faCheck, faEdit, faTrash, faUndo} from "@fortawesome/free-solid-svg-icons";
 
 interface TaskListItemProps {
     task: Task
@@ -62,13 +63,13 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                     </div>
                     <div className="mx-auto mx-sm-0">
                         <button className="btn btn-outline-success me-2" onClick={changeTaskCompletionHandler}>
-                            {<i className={task.completed ? "fa-solid fa-undo" : "fa-solid fa-check"}/>}
+                            {<FontAwesomeIcon icon={task.completed ? faUndo : faCheck}/>}
                         </button>
                         <button className="btn btn-outline-primary me-2" onClick={goToEdit}>
-                            <i className="fa-solid fa-edit"></i>
+                            <FontAwesomeIcon icon={faEdit}/>
                         </button>
                         <button className="btn btn-outline-danger" onClick={deleteTaskHandler}>
-                            <i className="fa-solid fa-trash"></i>
+                            <FontAwesomeIcon icon={faTrash}/>
                         </button>
                     </div>
                 </div>

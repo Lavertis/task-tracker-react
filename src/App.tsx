@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -14,9 +14,12 @@ import TaskList from "./components/TaskList/TaskList";
 function App() {
     const token = localStorage.getItem("token")
 
+    useEffect(() => {
+        document.title = "Task Tracker"
+    }, []);
+
     return (
         <Layout>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
 
