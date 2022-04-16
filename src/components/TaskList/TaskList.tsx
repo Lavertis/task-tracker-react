@@ -9,6 +9,7 @@ interface TaskListProps {
 
 const TaskList: FC<TaskListProps> = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
+
     const deleteTask = (id: string) => {
         axios.delete(`/tasks/${id}`)
             .then(() => {
@@ -16,12 +17,12 @@ const TaskList: FC<TaskListProps> = () => {
             });
     };
 
-    const markAsCompleted = (id: string) => {
-        axios.patch(`/tasks/${id}`, {completed: true})
+    const changeTaskCompletion = (id: string, completed: boolean) => {
+        axios.patch(`/tasks/${id}`, {completed: completed})
             .then(() => {
                 setTasks(tasks.map(task => {
                     if (task._id === id) {
-                        task.completed = true;
+                        task.completed = completed;
                     }
                     return task;
                 }));
@@ -49,7 +50,7 @@ const TaskList: FC<TaskListProps> = () => {
                         key={task._id}
                         task={task}
                         deleteTask={deleteTask}
-                        markAsCompleted={markAsCompleted}
+                        changeTaskCompletion={changeTaskCompletion}
                     />
                 ))
             }
