@@ -11,6 +11,7 @@ import Home from "./components/Home/Home";
 import CreateTask from "./components/CreateTask/CreateTask";
 import TaskList from "./components/TaskList/TaskList";
 import AccountDetails from "./components/AccountDetails/AccountDetails";
+import AccountDetailsEdit from "./components/AccountDetailsEdit/AccountDetailsEdit";
 
 function App() {
     const token = localStorage.getItem("token")
@@ -38,6 +39,9 @@ function App() {
 
                 {token && <Route path="/account" element={<AccountDetails/>}/>}
                 <Route path="/account" element={<Navigate replace to="/login"/>}/>
+
+                {token && <Route path="/account/edit" element={<AccountDetailsEdit/>}/>}
+                <Route path="/account/edit" element={<Navigate replace to="/login"/>}/>
             </Routes>
         </Layout>
     );

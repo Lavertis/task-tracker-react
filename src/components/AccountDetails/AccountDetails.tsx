@@ -2,7 +2,6 @@ import React, {FC, useEffect} from 'react';
 import {User} from "../../types/User";
 import axios from "../../api/axios";
 import {AxiosResponse} from "axios";
-import {logout} from "../../helpers/logout";
 import {useNavigate} from "react-router-dom";
 
 
@@ -12,14 +11,6 @@ interface AccountDetailsProps {
 const AccountDetails: FC<AccountDetailsProps> = () => {
     const navigate = useNavigate();
     const [user, setUser] = React.useState<User>({_id: "", email: "", firstName: "", lastName: "", password: ""})
-
-    const handleDelete = () => {
-        axios.delete(`/users/${user._id}`)
-            .then((response: AxiosResponse) => {
-                console.log(response)
-                logout()
-            })
-    }
 
     const goToEdit = () => {
         navigate(`/account/edit`)
@@ -50,11 +41,8 @@ const AccountDetails: FC<AccountDetailsProps> = () => {
                 <label className="form-label">Last name</label>
                 <input type="text" name="lastName" className="form-control" disabled defaultValue={user.lastName}/>
             </div>
-            <div className="mt-4 d-grid">
-                {/*<button type="submit" className="btn btn-danger col-sm-5" onClick={handleDelete}>*/}
-                {/*    Delete*/}
-                {/*</button>*/}
-                <button type="submit" className="btn btn-primary" onClick={goToEdit}>
+            <div className="d-grid d-sm-flex justify-content-sm-end mt-4">
+                <button type="submit" className="btn btn-primary col-sm-4" onClick={goToEdit}>
                     Edit
                 </button>
             </div>
