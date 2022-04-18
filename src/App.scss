@@ -1,27 +1,32 @@
-$theme-color: lightseagreen;
+$theme-bg-color: lightseagreen;
+$theme-text-color: white;
 
 body {
   background-color: whitesmoke !important;
 }
 
 nav.navbar {
-  background-color: $theme-color !important;
+  background-color: $theme-bg-color !important;
 }
 
 .navbar-nav > .nav-item > .dropdown-menu > .dropdown-item.active,
 .navbar-nav > .nav-item > .dropdown-menu > .dropdown-item:active {
-  background-color: $theme-color;
+  background-color: $theme-bg-color;
 }
 
-footer {
-  background-color: $theme-color;
+.bg-theme {
+  background-color: $theme-bg-color;
+}
+
+.text-theme {
+  color: $theme-text-color;
 }
 
 .btn-theme {
-  background-color: $theme-color !important;
-  color: white !important;
+  background-color: $theme-bg-color !important;
+  color: $theme-text-color !important;
 }
 
 .btn-theme:focus {
-  box-shadow: 0 0 0 0.25rem rgba($theme-color, 0.25) !important;
+  box-shadow: 0 0 0 0.25rem rgba($theme-bg-color, 0.25) !important;
 }

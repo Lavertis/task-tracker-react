@@ -2,6 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {Task} from "../../types/Task";
 import TaskListItem from "../TaskListItem/TaskListItem";
 import axios from "../../api/axios";
+import {Col} from "react-bootstrap";
 
 
 interface TaskListProps {
@@ -39,11 +40,11 @@ const TaskList: FC<TaskListProps> = () => {
             }
         }
 
-        fetchUserTasks()
+        fetchUserTasks().then()
     }, []);
 
     return (
-        <div className="col-11 col-sm-9 col-md-8 col-lg-7 col-xl-6 col-xxl-5 mx-auto mb-auto">
+        <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mb-auto">
             {
                 tasks.map(task => (
                     <TaskListItem
@@ -54,7 +55,7 @@ const TaskList: FC<TaskListProps> = () => {
                     />
                 ))
             }
-        </div>
+        </Col>
     );
 }
 

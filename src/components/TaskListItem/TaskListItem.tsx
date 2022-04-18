@@ -4,6 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import {Button} from "react-bootstrap";
 
 interface TaskListItemProps {
     task: Task
@@ -58,13 +59,6 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
 
     return (
         <>
-            <ConfirmationModal
-                title={"Delete confirmation"}
-                message={"Are you sure you want to delete this task?"}
-                isShown={modalIsShown}
-                confirm={deleteTaskHandler}
-                hide={hideModal}
-            />
             <div className="card my-2" data-id={task._id}>
                 <h5 className="card-header">{dueDateString}</h5>
                 <div className="card-body">
@@ -77,20 +71,28 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                         <div className="mx-auto mx-sm-0">
                             {
                                 !task.completed &&
-                                <button className="btn btn-outline-success me-2" onClick={changeTaskCompletionHandler}>
+                                <Button className="me-2" variant="outline-success"
+                                        onClick={changeTaskCompletionHandler}>
                                     <FontAwesomeIcon icon={faCheck}/>
-                                </button>
+                                </Button>
                             }
-                            <button className="btn btn-outline-primary me-2" onClick={goToEdit}>
+                            <Button className="me-2" variant="outline-primary" onClick={goToEdit}>
                                 <FontAwesomeIcon icon={faEdit}/>
-                            </button>
-                            <button className="btn btn-outline-danger" onClick={showModal}>
+                            </Button>
+                            <Button variant="outline-danger" onClick={showModal}>
                                 <FontAwesomeIcon icon={faTrash}/>
-                            </button>
+                            </Button>
                         </div>
                     </div>
                 </div>
             </div>
+            <ConfirmationModal
+                title={"Delete confirmation"}
+                message={"Are you sure you want to delete this task?"}
+                isShown={modalIsShown}
+                confirm={deleteTaskHandler}
+                hide={hideModal}
+            />
         </>
     );
 }

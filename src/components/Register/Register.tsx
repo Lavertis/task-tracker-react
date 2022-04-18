@@ -1,6 +1,7 @@
 import React, {FC, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import axios from "../../api/axios";
+import {Alert, Button, Col, Form} from "react-bootstrap";
 
 
 interface RegisterProps {
@@ -16,7 +17,7 @@ const Register: FC<RegisterProps> = () => {
     const [error, setError] = useState("")
     const navigate = useNavigate()
 
-    const handleChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement>) => {
+    const handleChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
         setData({...data, [input.name]: input.value})
     }
 
@@ -34,36 +35,62 @@ const Register: FC<RegisterProps> = () => {
     }
 
     return (
-        <div
-            className="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 mx-auto my-auto bg-light rounded-3 p-5 shadow">
-            {error && <div className="alert alert-danger text-center">{error}</div>}
-            <form onSubmit={handleSubmit}>
-                <div className="mb-3">
-                    <label className="form-label">Email address</label>
-                    <input type="email" name="email" className="form-control" required
-                           onChange={handleChange} value={data.email}/>
-                    <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">First name</label>
-                    <input type="text" name="firstName" className="form-control" required
-                           onChange={handleChange} value={data.firstName}/>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Last name</label>
-                    <input type="text" name="lastName" className="form-control" required
-                           onChange={handleChange} value={data.lastName}/>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Password</label>
-                    <input type="password" name="password" className="form-control" required
-                           onChange={handleChange} value={data.password}/>
-                </div>
-                <div className="d-grid">
-                    <button type="submit" className="btn btn-primary">Register</button>
-                </div>
-            </form>
-        </div>
+        <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
+            {error && <Alert variant="danger" className="text-center">{error}</Alert>}
+            <Form onSubmit={handleSubmit}>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputEmail">Email address</Form.Label>
+                    <Form.Control
+                        type="email"
+                        name="email"
+                        id="inputEmail"
+                        onChange={handleChange}
+                        value={data.email}
+                        aria-describedby="emailHelp"
+                        required
+                    />
+                    <Form.Text id="emailHelp" className="form-text">
+                        We'll never share your email with anyone else.
+                    </Form.Text>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputFirstName">First name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="firstName"
+                        id="inputFirstName"
+                        onChange={handleChange}
+                        value={data.firstName}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputLastName">Last name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="lastName"
+                        id="inputLastName"
+                        onChange={handleChange}
+                        value={data.lastName}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputPassword">Password</Form.Label>
+                    <Form.Control
+                        type="password"
+                        name="password"
+                        id="inputPassword"
+                        onChange={handleChange}
+                        value={data.password}
+                        required
+                    />
+                </Form.Group>
+                <Form.Group className="d-grid">
+                    <Button type="submit" variant="primary">Register</Button>
+                </Form.Group>
+            </Form>
+        </Col>
     );
 }
 

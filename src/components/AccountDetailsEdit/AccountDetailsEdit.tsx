@@ -4,6 +4,7 @@ import axios from "../../api/axios";
 import {AxiosResponse} from "axios";
 import {logout} from "../../helpers/logout";
 import {useNavigate} from "react-router-dom";
+import {Alert, Button, Col, Form} from "react-bootstrap";
 
 
 interface AccountDetailsEditProps {
@@ -21,7 +22,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     const [newData, setNewData] = React.useState<User>({_id: "", email: "", firstName: "", lastName: "", password: ""})
     const [error, setError] = useState("")
 
-    const handleTextChange = ({currentTarget: input}: React.FormEvent<HTMLInputElement>) => {
+    const handleTextChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
         setNewData({...newData, [input.name]: input.value})
     }
 
@@ -33,12 +34,15 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
             })
     }
 
-    const handleSave = async (e: React.FormEvent) => {
-        e.preventDefault()
+    const handleSave = async () => {
+        if (newData.email === "" || newData.firstName === "" || newData.lastName === "" || newData.password === "") {
+            setError("At least one field must be filled")
+            return
+        }
+
         try {
-            const response = await axios.patch("users", newData)
+            await axios.patch("users", newData)
             navigate("/account")
-            console.log(response.data)
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
@@ -57,43 +61,65 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     }, [])
 
     return (
-        <div
-            className="col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 mx-auto my-auto bg-light rounded-3 p-5 shadow">
-            {error && <div className="alert alert-danger text-center">{error}</div>}
-            <form>
-                <div className="mb-3">
-                    <label className="form-label">Email address</label>
-                    <input type="email" name="email" className="form-control" placeholder={currentData.email}
-                           onChange={handleTextChange} value={newData.email}/>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">First name</label>
-                    <input type="text" name="firstName" className="form-control" placeholder={currentData.firstName}
-                           onChange={handleTextChange} value={newData.firstName}/>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Last name</label>
-                    <input type="text" name="lastName" className="form-control" placeholder={currentData.lastName}
-                           onChange={handleTextChange} value={newData.lastName}/>
-                </div>
-                <div className="mb-3">
-                    <label className="form-label">Password</label>
-                    <input type="password" name="password" className="form-control" required
-                           onChange={handleTextChange} value={newData.password}/>
-                </div>
-                <div className="mt-5 mt-sm-4 d-grid d-sm-flex justify-content-sm-around">
-                    <button type="button" className="btn btn-danger col-sm-3 mb-2 mb-sm-0" onClick={handleDelete}>
+        <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
+            <Form>
+                {error && <Alert variant="danger" className="text-center">{error}</Alert>}
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputEmail">Email address</Form.Label>
+                    <Form.Control
+                        type="email"
+                        id="inputEmail"
+                        name="email"
+                        placeholder={currentData.email}
+                        onChange={handleTextChange}
+                        value={newData.email}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputFirstName">First name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        id="inputFirstName"
+                        name="firstName"
+                        placeholder={currentData.firstName}
+                        onChange={handleTextChange}
+                        value={newData.firstName}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputLastName">Last name</Form.Label>
+                    <Form.Control
+                        type="text"
+                        id="inputLastName"
+                        name="lastName"
+                        placeholder={currentData.lastName}
+                        onChange={handleTextChange}
+                        value={newData.lastName}
+                    />
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="inputPassword">Password</Form.Label>
+                    <Form.Control
+                        type="password"
+                        id="inputPassword"
+                        name="password"
+                        onChange={handleTextChange}
+                        value={newData.password}
+                    />
+                </Form.Group>
+                <Form.Group className="mt-5 mt-sm-4 d-grid d-sm-flex justify-content-sm-around">
+                    <Button variant="danger" className="col-sm-3 mb-2 mb-sm-0" onClick={handleDelete}>
                         Delete
-                    </button>
-                    <button type="button" className="btn btn-success col-sm-3 mb-2 mb-sm-0" onClick={handleSave}>
+                    </Button>
+                    <Button variant="success" className="col-sm-3 mb-2 mb-sm-0" onClick={handleSave}>
                         Save
-                    </button>
-                    <button type="button" className="btn btn-secondary col-sm-3" onClick={() => navigate('/account')}>
+                    </Button>
+                    <Button variant="secondary" className="col-sm-3" onClick={() => navigate('/account')}>
                         Cancel
-                    </button>
-                </div>
-            </form>
-        </div>
+                    </Button>
+                </Form.Group>
+            </Form>
+        </Col>
     );
 }
 
