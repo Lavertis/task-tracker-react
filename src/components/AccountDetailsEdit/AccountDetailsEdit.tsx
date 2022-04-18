@@ -5,6 +5,7 @@ import {AxiosResponse} from "axios";
 import {logout} from "../../helpers/logout";
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, Col, Form} from "react-bootstrap";
+import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 
 interface AccountDetailsEditProps {
@@ -27,7 +28,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     }
 
     const handleDelete = () => {
-        axios.delete(`/users/${currentData._id}`)
+        axios.delete(`users`)
             .then((response: AxiosResponse) => {
                 console.log(response)
                 logout()
@@ -35,7 +36,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     }
 
     const handleSave = async () => {
-        if (newData.email === "" || newData.firstName === "" || newData.lastName === "" || newData.password === "") {
+        if (newData.email === "" && newData.firstName === "" && newData.lastName === "" && newData.password === "") {
             setError("At least one field must be filled")
             return
         }
@@ -59,6 +60,10 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                 setCurrentData(res.data)
             })
     }, [])
+
+    const [modalIsShown, setModalIsShown] = useState(false);
+    const hideModal = () => setModalIsShown(false);
+    const showModal = () => setModalIsShown(true);
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
@@ -108,7 +113,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                     />
                 </Form.Group>
                 <Form.Group className="mt-5 mt-sm-4 d-grid d-sm-flex justify-content-sm-around">
-                    <Button variant="danger" className="col-sm-3 mb-2 mb-sm-0" onClick={handleDelete}>
+                    <Button variant="danger" className="col-sm-3 mb-2 mb-sm-0" onClick={showModal}>
                         Delete
                     </Button>
                     <Button variant="success" className="col-sm-3 mb-2 mb-sm-0" onClick={handleSave}>
@@ -119,6 +124,13 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                     </Button>
                 </Form.Group>
             </Form>
+            <ConfirmationModal
+                title={"Delete confirmation"}
+                message={"Are you sure you want to delete your account?"}
+                isShown={modalIsShown}
+                confirm={handleDelete}
+                hide={hideModal}
+            />
         </Col>
     );
 }
