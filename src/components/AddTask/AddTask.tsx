@@ -5,7 +5,7 @@ import {useNavigate} from "react-router-dom";
 interface CreateTaskProps {
 }
 
-const CreateTask: FC<CreateTaskProps> = () => {
+const AddTask: FC<CreateTaskProps> = () => {
     const navigate = useNavigate()
     const [task, setTask] = useState({
         title: '',
@@ -80,4 +80,4 @@ const CreateTask: FC<CreateTaskProps> = () => {
     );
 }
 
-export default CreateTask;
+export default AddTask;

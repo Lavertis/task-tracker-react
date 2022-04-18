@@ -8,7 +8,7 @@ import Register from "./components/Register/Register";
 import EditTask from "./components/EditTask/EditTask";
 import Login from "./components/Login/Login";
 import Home from "./components/Home/Home";
-import CreateTask from "./components/CreateTask/CreateTask";
+import AddTask from "./components/AddTask/AddTask";
 import TaskList from "./components/TaskList/TaskList";
 import AccountDetails from "./components/AccountDetails/AccountDetails";
 import AccountDetailsEdit from "./components/AccountDetailsEdit/AccountDetailsEdit";
@@ -28,7 +28,7 @@ function App() {
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/login" element={<Login/>}/>
 
-                {token && <Route path="/tasks/create" element={<CreateTask/>}/>}
+                {token && <Route path="/tasks/create" element={<AddTask/>}/>}
                 <Route path="/tasks/create" element={<Navigate replace to="/login"/>}/>
 
                 {token && <Route path="/tasks/user/all" element={<TaskList/>}/>}

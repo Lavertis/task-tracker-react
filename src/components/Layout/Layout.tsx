@@ -1,5 +1,5 @@
 import React, {FC, ReactNode} from 'react';
-import Navbar from "../Navbar/Navbar";
+import MyNavbar from "../MyNavbar/MyNavbar";
 import Footer from "../Footer/Footer";
 
 
@@ -9,7 +9,7 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({children}) => (
     <div className="d-flex flex-column min-vh-100">
-        <Navbar/>
+        <MyNavbar/>
         <>{children}</>
         <Footer/>
     </div>

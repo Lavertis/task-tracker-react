@@ -8,7 +8,8 @@ nav.navbar {
   background-color: $theme-color !important;
 }
 
-.navbar-nav > li > .dropdown-menu > li > .dropdown-item:active {
+.navbar-nav > .nav-item > .dropdown-menu > .dropdown-item.active,
+.navbar-nav > .nav-item > .dropdown-menu > .dropdown-item:active {
   background-color: $theme-color;
 }
 

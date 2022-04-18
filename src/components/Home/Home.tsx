@@ -6,7 +6,7 @@ interface HomeProps {
 }
 
 const Home: FC<HomeProps> = () => (
-    <div className="mx-auto mb-auto text-center">
+    <div className="mx-4 mb-auto text-center">
         <h1 className="mb-4">Task Tracker</h1>
         <p>Welcome to the Task Tracker!</p>
         <p>
