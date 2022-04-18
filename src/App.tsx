@@ -12,6 +12,7 @@ import AddTask from "./components/AddTask/AddTask";
 import TaskList from "./components/TaskList/TaskList";
 import AccountDetails from "./components/AccountDetails/AccountDetails";
 import AccountDetailsEdit from "./components/AccountDetailsEdit/AccountDetailsEdit";
+import Error404 from "./components/Error404/Error404";
 
 function App() {
     const token = localStorage.getItem("token")
@@ -42,6 +43,8 @@ function App() {
 
                 {token && <Route path="/account/edit" element={<AccountDetailsEdit/>}/>}
                 <Route path="/account/edit" element={<Navigate replace to="/login"/>}/>
+
+                <Route path="*" element={<Error404/>}/>
             </Routes>
         </Layout>
     );
