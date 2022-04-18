@@ -2,7 +2,7 @@ import React, {FC, useEffect, useState} from 'react';
 import {Task} from "../../types/Task";
 import TaskListItem from "../TaskListItem/TaskListItem";
 import axios from "../../api/axios";
-import {Col, Pagination} from "react-bootstrap";
+import {Accordion, Col, Pagination} from "react-bootstrap";
 import {useNavigate} from "react-router-dom";
 
 
@@ -14,7 +14,7 @@ const TaskList: FC<TaskListProps> = () => {
     const [tasks, setTasks] = useState<Task[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [totalNumberOfPages, setTotalNumberOfPages] = useState<number>(1);
-    const tasksPerPage = 3;
+    const tasksPerPage = 10;
 
     const deleteTask = (id: string) => {
         axios.delete(`/tasks/${id}`)
@@ -75,18 +75,19 @@ const TaskList: FC<TaskListProps> = () => {
 
     return (
         <>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-auto">
-                {
-                    tasks.map(task => (
-                        <TaskListItem
-                            key={task._id}
-                            task={task}
-                            deleteTask={deleteTask}
-                            changeTaskCompletion={changeTaskCompletion}
-                        />
-                    ))
-                }
-
+            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-5">
+                <Accordion defaultActiveKey="0" alwaysOpen>
+                    {
+                        tasks.map(task => (
+                            <TaskListItem
+                                key={task._id}
+                                task={task}
+                                deleteTask={deleteTask}
+                                changeTaskCompletion={changeTaskCompletion}
+                            />
+                        ))
+                    }
+                </Accordion>
             </Col>
             <Pagination className="mt-auto mb-5 d-flex justify-content-center">
                 <Pagination.Prev onClick={prevPage} disabled={currentPage === 1}/>

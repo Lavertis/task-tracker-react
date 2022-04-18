@@ -4,7 +4,7 @@ import {useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
-import {Button} from "react-bootstrap";
+import {Accordion, Button, Col} from "react-bootstrap";
 
 interface TaskListItemProps {
     task: Task
@@ -67,18 +67,22 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
     const [modalIsShown, setModalIsShown] = useState(false);
     const hideModal = () => setModalIsShown(false);
     const showModal = () => setModalIsShown(true);
-
+    
     return (
         <>
-            <div className="card my-2" data-id={task._id}>
-                <div className="d-flex justify-content-between card-header">
-                    <h5 className="mb-0">{dueDateString}</h5>
-                    <p className="mb-0">{getTaskStatus()}</p>
-                </div>
+            <Accordion.Item eventKey={task._id}>
+                <Accordion.Header>
+                    <div className="d-flex justify-content-between w-100">
+                        <h5 className="my-auto">{task.title}</h5>
+                        <span className="me-3">{getTaskStatus()}</span>
+                    </div>
+                </Accordion.Header>
+                <Accordion.Body>
+                    <Col md={8} className="mb-4">
+                        <h5 className="card-title">{dueDateString}</h5>
+                        <p className="card-text break-words">{task.description}</p>
+                    </Col>
 
-                <div className="card-body">
-                    <h5 className="card-title">{task.title}</h5>
-                    <p className="card-text">{task.description}</p>
                     <div className="d-flex flex-column flex-sm-row justify-content-between">
                         <div className="mb-3 mx-auto mx-sm-0 my-sm-auto">
                             {getTaskPriority()}
@@ -99,8 +103,8 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                             </Button>
                         </div>
                     </div>
-                </div>
-            </div>
+                </Accordion.Body>
+            </Accordion.Item>
             <ConfirmationModal
                 title={"Delete confirmation"}
                 message={"Are you sure you want to delete this task?"}
