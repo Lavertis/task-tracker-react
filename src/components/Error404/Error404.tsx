@@ -20,7 +20,7 @@ const Error404: FC<Error404Props> = () => {
     }, [counter, navigate])
 
     return (
-        <Col xs={11} sm={10} md={8} lg={7} xl={6} className="text-center mx-auto mb-auto">
+        <Col xs={11} sm={10} md={8} lg={7} xl={6} className="text-center mt-5 mx-auto mb-auto">
             <Alert variant="danger">
                 <p className="h4 mt-2 mb-4">Error 404</p>
                 <p className="fs-5">Oopsss, we did not find the page you are looking for</p>
