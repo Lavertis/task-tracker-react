@@ -5,6 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 import {Accordion, Button, Col} from "react-bootstrap";
+import Countdown from "react-countdown";
 
 interface TaskListItemProps {
     task: Task
@@ -44,19 +45,19 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
         const day = 60 * 60 * 24 * 1000;
 
         if (task.completed)
-            return <span className="badge bg-success px-3 py-2">Completed</span>
+            return <Col xs={11} sm={12} xxl={11} className="badge bg-success px-3 py-2">Completed</Col>
         else if (!task.completed && dueDate.getTime() < nowDate.getTime())
-            return <span className="badge bg-danger px-3 py-2">Overdue</span>
+            return <Col xs={11} sm={12} xxl={11} className="badge bg-danger px-3 py-2">Overdue</Col>
         else if (!task.completed && (dueDate.getTime() - nowDate.getTime() < day))
-            return <span className="badge bg-orange px-3 py-2">Due Soon</span>
+            return <Col xs={11} sm={12} xxl={11} className="badge bg-orange px-3 py-2">Due Soon</Col>
         else
-            return <span className="badge bg-primary px-3 py-2">Not Completed</span>
+            return <Col xs={11} sm={12} xxl={11} className="badge bg-primary px-3 py-2">Not Completed</Col>
     }
 
     const getTaskPriority = () => {
         switch (task.priority) {
             case 1:
-                return <span className="badge rounded-pill bg-primary px-3 py-2">Low priority</span>
+                return <span className="badge rounded-pill bg-success px-3 py-2">Low priority</span>
             case 2:
                 return <span className="badge rounded-pill bg-orange px-3 py-2">Medium priority</span>
             case 3:
@@ -67,26 +68,65 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
     const [modalIsShown, setModalIsShown] = useState(false);
     const hideModal = () => setModalIsShown(false);
     const showModal = () => setModalIsShown(true);
-    
+
+    type timerRendererProps = {
+        days: number
+        hours: number
+        minutes: number
+        seconds: number
+        completed: boolean
+    }
+    const timerRenderer = ({days, hours, minutes, seconds, completed}: timerRendererProps) => {
+        let str = '';
+        if (completed) {
+            return str;
+        } else {
+            if (days > 0) {
+                if (days === 1) {
+                    str += `${days} day `
+                } else {
+                    str += `${days} days `
+                }
+            }
+            if (hours > 0) {
+                if (hours === 1) {
+                    str += `${hours} hour `
+                } else {
+                    str += `${hours} hours `
+                }
+            }
+            if (days === 0 && hours === 0) {
+                str += 'Less than an hour'
+            }
+            str += ' left'
+            return str
+        }
+    };
+
     return (
         <>
             <Accordion.Item eventKey={task._id}>
                 <Accordion.Header>
                     <div className="d-flex justify-content-between w-100">
-                        <h5 className="my-auto">{task.title}</h5>
-                        <span className="me-3">{getTaskStatus()}</span>
+                        <Col className="my-auto h5 me-2">{task.title}</Col>
+                        <Col xs={6} sm={4} lg={3} className="my-auto me-sm-3 me-xxl-1">{getTaskStatus()}</Col>
                     </div>
                 </Accordion.Header>
                 <Accordion.Body>
-                    <Col md={8} className="mb-4">
-                        <h5 className="card-title">{dueDateString}</h5>
+                    <Col md={12} className="mb-4">
+                        <div className="d-flex justify-content-between">
+                            <h5 className="card-title col-7">{dueDateString}</h5>
+                            <h5 className="card-title">
+                                <Countdown date={task.dueDate} renderer={timerRenderer}/>
+                            </h5>
+                        </div>
                         <p className="card-text break-words">{task.description}</p>
                     </Col>
 
                     <div className="d-flex flex-column flex-sm-row justify-content-between">
-                        <div className="mb-3 mx-auto mx-sm-0 my-sm-auto">
+                        <Col className="mb-3 mx-auto mx-sm-0 my-sm-auto">
                             {getTaskPriority()}
-                        </div>
+                        </Col>
                         <div className="mx-auto mx-sm-0">
                             {
                                 !task.completed &&
