@@ -75,7 +75,7 @@ const TaskList: FC<TaskListProps> = () => {
 
     return (
         <>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-4 mb-auto">
+            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-auto">
                 {
                     tasks.map(task => (
                         <TaskListItem
