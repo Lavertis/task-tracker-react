@@ -1,8 +1,9 @@
-import React, {FC} from 'react';
+import React, {FC, useState} from 'react';
 import {Task} from "../../types/Task";
 import {useNavigate} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
+import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
 
 interface TaskListItemProps {
     task: Task
@@ -51,31 +52,46 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
             return <span className="badge rounded-pill bg-primary px-3 py-2">Not Completed</span>
     }
 
+    const [modalIsShown, setModalIsShown] = useState(false);
+    const hideModal = () => setModalIsShown(false);
+    const showModal = () => setModalIsShown(true);
+
     return (
-        <div className="card my-2" data-id={task._id}>
-            <h5 className="card-header">{dueDateString}</h5>
-            <div className="card-body">
-                <h5 className="card-title">{task.title}</h5>
-                <p className="card-text">{task.description}</p>
-                <div className="d-flex flex-column flex-sm-row justify-content-between">
-                    <div className="mb-3 mx-auto mx-sm-0 my-sm-auto">
-                        {getTaskStatus()}
-                    </div>
-                    <div className="mx-auto mx-sm-0">
-                        {task.completed ? '' :
-                            <button className="btn btn-outline-success me-2" onClick={changeTaskCompletionHandler}>
-                                <FontAwesomeIcon icon={faCheck}/>
-                            </button>}
-                        <button className="btn btn-outline-primary me-2" onClick={goToEdit}>
-                            <FontAwesomeIcon icon={faEdit}/>
-                        </button>
-                        <button className="btn btn-outline-danger" onClick={deleteTaskHandler}>
-                            <FontAwesomeIcon icon={faTrash}/>
-                        </button>
+        <>
+            <ConfirmationModal
+                title={"Delete confirmation"}
+                message={"Are you sure you want to delete this task?"}
+                isShown={modalIsShown}
+                confirm={deleteTaskHandler}
+                hide={hideModal}
+            />
+            <div className="card my-2" data-id={task._id}>
+                <h5 className="card-header">{dueDateString}</h5>
+                <div className="card-body">
+                    <h5 className="card-title">{task.title}</h5>
+                    <p className="card-text">{task.description}</p>
+                    <div className="d-flex flex-column flex-sm-row justify-content-between">
+                        <div className="mb-3 mx-auto mx-sm-0 my-sm-auto">
+                            {getTaskStatus()}
+                        </div>
+                        <div className="mx-auto mx-sm-0">
+                            {
+                                !task.completed &&
+                                <button className="btn btn-outline-success me-2" onClick={changeTaskCompletionHandler}>
+                                    <FontAwesomeIcon icon={faCheck}/>
+                                </button>
+                            }
+                            <button className="btn btn-outline-primary me-2" onClick={goToEdit}>
+                                <FontAwesomeIcon icon={faEdit}/>
+                            </button>
+                            <button className="btn btn-outline-danger" onClick={showModal}>
+                                <FontAwesomeIcon icon={faTrash}/>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

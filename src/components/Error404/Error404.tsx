@@ -16,7 +16,7 @@ const Error404: FC<Error404Props> = () => {
 
     useEffect(() => {
         counter === 0 && navigate('/')
-    }, [counter])
+    }, [counter, navigate])
 
     return (
         <div className="container-fluid mb-auto">
