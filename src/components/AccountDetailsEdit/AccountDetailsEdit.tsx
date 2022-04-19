@@ -50,7 +50,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
 
         try {
             await axios.patch("users", newData)
-            navigate("/account")
+            navigate(-1)
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
@@ -126,7 +126,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                     <Button variant="success" className="col-sm-3 mb-2 mb-sm-0" onClick={handleSave}>
                         Save
                     </Button>
-                    <Button variant="secondary" className="col-sm-3" onClick={() => navigate('/account')}>
+                    <Button variant="secondary" className="col-sm-3" onClick={() => navigate(-1)}>
                         Cancel
                     </Button>
                 </Form.Group>

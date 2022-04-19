@@ -47,23 +47,25 @@ const MyNavbar: FC<NavbarProps> = () => {
 
     return (
         <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
-            <Container fluid={true}>
+            <Container fluid>
                 <Navbar.Brand>Task Tracker</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                 <Navbar.Collapse id="responsive-navbar-nav">
-                    <Nav className="me-auto">
-                        <LinkContainer to="/">
-                            <Nav.Link>Home</Nav.Link>
-                        </LinkContainer>
-                        <LinkContainer to="/tasks/user/all">
-                            <Nav.Link>My Tasks</Nav.Link>
-                        </LinkContainer>
-                        <LinkContainer to="/tasks/create">
-                            <Nav.Link>Add Task</Nav.Link>
-                        </LinkContainer>
-                    </Nav>
-                    <Nav>
-                        {token ? getUserDropdown() : getAuthLinks()}
+                    <Nav className="col-12">
+                        <Nav.Item className="me-auto d-lg-flex">
+                            <LinkContainer to="/">
+                                <Nav.Link>Home</Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/tasks/user/all">
+                                <Nav.Link>My Tasks</Nav.Link>
+                            </LinkContainer>
+                            <LinkContainer to="/tasks/create">
+                                <Nav.Link>Add Task</Nav.Link>
+                            </LinkContainer>
+                        </Nav.Item>
+                        <Nav.Item className="d-lg-flex">
+                            {token ? getUserDropdown() : getAuthLinks()}
+                        </Nav.Item>
                     </Nav>
                 </Navbar.Collapse>
             </Container>

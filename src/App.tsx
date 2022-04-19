@@ -24,22 +24,20 @@ export const TokenContext = React.createContext<{ token: string; setToken: Dispa
 );
 
 function App() {
-    const [token, setToken] = React.useState<string>('');
+    const [token, setToken] = React.useState<string>(localStorage.getItem('token') ?? '');
 
     useEffect(() => {
         document.title = "Task Tracker"
 
-        const handleToken = () => {
-            const token = localStorage.getItem('token');
+        const loadToken = () => {
             if (!token) return;
-
-            if (isTokenExpired(token))
+            if (isTokenExpired(token)) {
                 localStorage.removeItem('token');
-            else
-                setToken(token);
+                setToken('');
+            }
         };
-        handleToken();
-    }, []);
+        loadToken();
+    }, [token]);
 
     return (
         <TokenContext.Provider value={{token, setToken}}>

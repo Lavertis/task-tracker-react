@@ -107,11 +107,11 @@ const TaskList: FC<TaskListProps> = () => {
     useEffect(() => {
         const fetchUserTasks = async () => {
             try {
-                const url = `tasks/auth/all/?page=${currentPage}&limit=${tasksPerPage}`;
-                const response = await axios.get(url);
+                const fetchUrl = `tasks/auth/all/?page=${currentPage}&limit=${tasksPerPage}`;
+                const response = await axios.get(fetchUrl);
                 setTasks(response.data.tasks);
                 setTotalNumberOfPages(Math.ceil(response.data.totalCount / tasksPerPage));
-                navigate(url)
+                navigate(`?page=${currentPage}&limit=${tasksPerPage}`)
             } catch (err) {
                 console.log(err);
             }

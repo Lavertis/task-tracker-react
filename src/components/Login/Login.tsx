@@ -1,6 +1,8 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 import axios from "../../api/axios";
 import {Alert, Button, Col, Form} from "react-bootstrap";
+import {useNavigate} from "react-router-dom";
+import {TokenContext} from "../../App";
 
 
 interface LoginProps {
@@ -9,6 +11,8 @@ interface LoginProps {
 const Login: FC<LoginProps> = () => {
     const [data, setData] = useState({email: "", password: ""})
     const [error, setError] = useState("")
+    const {setToken} = useContext(TokenContext);
+    const navigate = useNavigate()
 
     const handleChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
         setData({...data, [input.name]: input.value})
@@ -19,7 +23,8 @@ const Login: FC<LoginProps> = () => {
         try {
             const {data: res} = await axios.post("auth", data)
             localStorage.setItem("token", res.data)
-            window.location.href = "/"
+            setToken(res.data)
+            navigate(-1)
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)

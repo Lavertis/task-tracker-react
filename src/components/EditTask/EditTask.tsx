@@ -134,7 +134,7 @@ const EditTask: FC<EditTaskProps> = () => {
                 </Form.Group>
                 <Form.Group className="d-grid">
                     <Button variant="success" type="submit" className="mb-2">Save</Button>
-                    <Button variant="secondary" onClick={() => navigate('/tasks/user/all')}>
+                    <Button variant="secondary" onClick={() => navigate(-1)}>
                         Cancel
                     </Button>
                 </Form.Group>

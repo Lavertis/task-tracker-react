@@ -9,8 +9,8 @@ nav.navbar {
   background-color: $theme-bg-color !important;
 }
 
-.navbar-nav > .nav-item > .dropdown-menu > .dropdown-item.active,
-.navbar-nav > .nav-item > .dropdown-menu > .dropdown-item:active {
+.navbar-nav > .nav-item > .nav-item > .dropdown-menu > .dropdown-item.active,
+.navbar-nav > .nav-item > .nav-item > .dropdown-menu > .dropdown-item:active {
   background-color: $theme-bg-color;
 }
 
