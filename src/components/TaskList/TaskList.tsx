@@ -13,21 +13,22 @@ const TaskList: FC<TaskListProps> = () => {
     const navigate = useNavigate()
     const [tasks, setTasks] = useState<Task[]>([]);
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalNumberOfPages, setTotalNumberOfPages] = useState<number>(1);
+    const [totalNumberOfPages, setTotalNumberOfPages] = useState<number>(0);
+    const [tasksFetched, setTasksFetched] = useState<boolean>(false);
     const tasksPerPage = 10;
 
     const getTaskListItems = () => {
-        if (tasks.length === 0) {
+        if (tasks.length === 0 && tasksFetched) {
             return (
                 <Alert variant="primary" className="text-center">
                     <p className="my-auto fs-4">You have no tasks</p>
                 </Alert>
             )
         }
-        return tasks.map((task, index) => {
+        return tasks.map((task) => {
             return (
                 <TaskListItem
-                    key={index}
+                    key={task._id}
                     task={task}
                     deleteTask={deleteTask}
                     changeTaskCompletion={changeTaskCompletion}
@@ -49,7 +50,7 @@ const TaskList: FC<TaskListProps> = () => {
             }
         };
 
-        if (totalNumberOfPages === 1) return null
+        if (totalNumberOfPages === 0) return null
         return (
             <>
                 <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1}/>
@@ -116,7 +117,7 @@ const TaskList: FC<TaskListProps> = () => {
             }
         }
 
-        fetchUserTasks().then();
+        fetchUserTasks().then(() => setTasksFetched(true))
     }, [currentPage, navigate]);
 
     return (

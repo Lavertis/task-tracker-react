@@ -8,7 +8,6 @@ interface NavbarProps {
 
 const MyNavbar: FC<NavbarProps> = () => {
     const token = localStorage.getItem("token");
-    const email = token ? JSON.parse(atob(token.split('.')[1])).email : null;
 
     const getAuthLinks = () => {
         return (
@@ -24,6 +23,8 @@ const MyNavbar: FC<NavbarProps> = () => {
     }
 
     const getUserDropdown = () => {
+        const email = token ? JSON.parse(atob(token.split('.')[1])).email : null;
+
         return (
             <NavDropdown title={email} align={"end"}>
                 <LinkContainer to="/account">
