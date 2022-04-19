@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useEffect} from 'react';
+import React, {useEffect} from 'react';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -15,13 +15,7 @@ import AccountDetailsEdit from "./components/AccountDetailsEdit/AccountDetailsEd
 import Error404 from "./components/Error404/Error404";
 import {isTokenExpired} from "./helpers/token-helper";
 
-export const TokenContext = React.createContext<{ token: string; setToken: Dispatch<SetStateAction<string>>; }>(
-    {
-        token: '',
-        setToken: () => {
-        }
-    }
-);
+export const TokenContext = React.createContext<string>('');
 
 function App() {
     const [token, setToken] = React.useState<string>(localStorage.getItem('token') ?? '');
@@ -40,7 +34,7 @@ function App() {
     }, [token]);
 
     return (
-        <TokenContext.Provider value={{token, setToken}}>
+        <TokenContext.Provider value={token}>
             <Layout>
                 <Routes>
                     <Route path="/" element={<Home/>}/>

@@ -1,8 +1,7 @@
-import React, {FC, useContext, useState} from 'react';
+import React, {FC, useState} from 'react';
 import axios from "../../api/axios";
 import {Alert, Button, Col, Form} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
-import {TokenContext} from "../../App";
+import {AxiosError, AxiosResponse} from "axios";
 
 
 interface LoginProps {
@@ -11,8 +10,6 @@ interface LoginProps {
 const Login: FC<LoginProps> = () => {
     const [data, setData] = useState({email: "", password: ""})
     const [error, setError] = useState("")
-    const {setToken} = useContext(TokenContext);
-    const navigate = useNavigate()
 
     const handleChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
         setData({...data, [input.name]: input.value})
@@ -20,16 +17,17 @@ const Login: FC<LoginProps> = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
-        try {
-            const {data: res} = await axios.post("auth", data)
-            localStorage.setItem("token", res.data)
-            setToken(res.data)
-            navigate(-1)
-        } catch (error: any) {
-            if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                setError(error.response.data.message)
-            }
-        }
+
+        axios.post("auth", data)
+            .then(({data: res}: AxiosResponse) => {
+                localStorage.setItem("token", res.data)
+                window.location.href = '/'
+            })
+            .catch((err: AxiosError) => {
+                if (err.response && err.response.status >= 400 && err.response.status <= 500) {
+                    setError(err.response.data.message)
+                }
+            })
     }
 
     return (

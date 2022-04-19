@@ -95,10 +95,12 @@ const TaskList: FC<TaskListProps> = () => {
     };
 
     const fetchTasks = useCallback(() => {
-        const url = `tasks/auth/all/?page=${page}&limit=${tasksPerPage}`;
+        const url = `tasks/auth/all?page=${page}&limit=${tasksPerPage}`;
         axios.get(url)
             .then((response: AxiosResponse) => {
+                console.log(response.data)
                 setTasks(response.data.tasks);
+                setTasksFetched(true);
                 setPageCount(Math.ceil(response.data.totalCount / tasksPerPage));
             })
             .catch((error: AxiosError) => {
@@ -108,13 +110,12 @@ const TaskList: FC<TaskListProps> = () => {
 
     useEffect(() => {
         fetchTasks();
-        setTasksFetched(true);
         navigate(`?page=${page}&limit=${tasksPerPage}`);
     }, [page, fetchTasks, navigate, tasksPerPage]);
 
     return (
         <>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-5">
+            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-5 shadow shadow-sm">
                 <Accordion defaultActiveKey="0" alwaysOpen>
                     {getTaskListItems()}
                 </Accordion>
