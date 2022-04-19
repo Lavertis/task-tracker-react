@@ -1,9 +1,10 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Task} from "../../types/Task";
 import TaskListItem from "../TaskListItem/TaskListItem";
 import axios from "../../api/axios";
 import {Accordion, Alert, Col, Pagination} from "react-bootstrap";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
+import {AxiosError, AxiosResponse} from "axios";
 
 
 interface TaskListProps {
@@ -11,11 +12,12 @@ interface TaskListProps {
 
 const TaskList: FC<TaskListProps> = () => {
     const navigate = useNavigate()
+    const [searchParams] = useSearchParams();
     const [tasks, setTasks] = useState<Task[]>([]);
-    const [currentPage, setCurrentPage] = useState<number>(1);
-    const [totalNumberOfPages, setTotalNumberOfPages] = useState<number>(0);
+    const [page, setPage] = useState<number>(parseInt(searchParams.get('page') ?? '1'));
+    const [pageCount, setPageCount] = useState<number>(0);
     const [tasksFetched, setTasksFetched] = useState<boolean>(false);
-    const tasksPerPage = 10;
+    const [tasksPerPage] = useState<number>(parseInt(searchParams.get('limit') ?? '10'));
 
     const getTaskListItems = () => {
         if (tasks.length === 0 && tasksFetched) {
@@ -39,35 +41,33 @@ const TaskList: FC<TaskListProps> = () => {
 
     const getPaginationItems = () => {
         const prevPage = () => {
-            if (currentPage > 1) {
-                setCurrentPage(currentPage - 1);
+            if (page > 1) {
+                setPage(page - 1);
             }
         };
 
         const nextPage = () => {
-            if (currentPage < totalNumberOfPages) {
-                setCurrentPage(currentPage + 1);
+            if (page < pageCount) {
+                setPage(page + 1);
             }
         };
 
-        if (totalNumberOfPages === 0) return null
+        if (pageCount === 0) return null
         return (
             <>
-                <Pagination.First onClick={() => setCurrentPage(1)} disabled={currentPage === 1}/>
-                <Pagination.Prev onClick={prevPage} disabled={currentPage === 1}/>
-                {[...Array(totalNumberOfPages)].map((_, index) => {
+                <Pagination.First onClick={() => setPage(1)} disabled={page === 1}/>
+                <Pagination.Prev onClick={prevPage} disabled={page === 1}/>
+                {[...Array(pageCount)].map((_, index) => {
                     return (
                         <Pagination.Item
                             key={index + 1}
-                            active={index + 1 === currentPage}
-                            onClick={() => setCurrentPage(index + 1)}>{index + 1}
+                            active={index + 1 === page}
+                            onClick={() => setPage(index + 1)}>{index + 1}
                         </Pagination.Item>
                     )
                 })}
-                <Pagination.Next onClick={nextPage}
-                                 disabled={currentPage === totalNumberOfPages}/>
-                <Pagination.Last onClick={() => setCurrentPage(totalNumberOfPages)}
-                                 disabled={currentPage === totalNumberOfPages}/>
+                <Pagination.Next onClick={nextPage} disabled={page === pageCount}/>
+                <Pagination.Last onClick={() => setPage(pageCount)} disabled={page === pageCount}/>
             </>
         )
     }
@@ -75,20 +75,10 @@ const TaskList: FC<TaskListProps> = () => {
     const deleteTask = (id: string) => {
         axios.delete(`/tasks/${id}`)
             .then(() => {
-                const fetchUserTasks = async () => {
-                    if (tasks.length === 1 && currentPage > 1) {
-                        setCurrentPage(currentPage - 1);
-                    }
-                    try {
-                        const url = `tasks/auth/all/?page=${currentPage}&limit=${tasksPerPage}`;
-                        const response = await axios.get(url);
-                        setTasks(response.data.tasks);
-                        setTotalNumberOfPages(Math.ceil(response.data.totalCount / tasksPerPage));
-                    } catch (err) {
-                        console.log(err);
-                    }
-                }
-                fetchUserTasks().then()
+                if (tasks.length === 1 && page > 1)
+                    setPage(page - 1);
+
+                fetchTasks();
             });
     };
 
@@ -104,21 +94,23 @@ const TaskList: FC<TaskListProps> = () => {
             });
     };
 
-    useEffect(() => {
-        const fetchUserTasks = async () => {
-            try {
-                const fetchUrl = `tasks/auth/all/?page=${currentPage}&limit=${tasksPerPage}`;
-                const response = await axios.get(fetchUrl);
+    const fetchTasks = useCallback(() => {
+        const url = `tasks/auth/all/?page=${page}&limit=${tasksPerPage}`;
+        axios.get(url)
+            .then((response: AxiosResponse) => {
                 setTasks(response.data.tasks);
-                setTotalNumberOfPages(Math.ceil(response.data.totalCount / tasksPerPage));
-                navigate(`?page=${currentPage}&limit=${tasksPerPage}`)
-            } catch (err) {
-                console.log(err);
-            }
-        }
+                setPageCount(Math.ceil(response.data.totalCount / tasksPerPage));
+            })
+            .catch((error: AxiosError) => {
+                console.log(error);
+            })
+    }, [page, tasksPerPage]);
 
-        fetchUserTasks().then(() => setTasksFetched(true))
-    }, [currentPage, navigate]);
+    useEffect(() => {
+        fetchTasks();
+        setTasksFetched(true);
+        navigate(`?page=${page}&limit=${tasksPerPage}`);
+    }, [page, fetchTasks, navigate, tasksPerPage]);
 
     return (
         <>

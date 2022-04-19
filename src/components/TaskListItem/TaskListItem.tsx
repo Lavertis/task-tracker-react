@@ -1,6 +1,6 @@
 import React, {FC, useState} from 'react';
 import {Task} from "../../types/Task";
-import {useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
@@ -14,8 +14,6 @@ interface TaskListItemProps {
 }
 
 const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskCompletion}) => {
-    const navigate = useNavigate()
-
     const dateOptions = {
         weekday: 'long',
         year: 'numeric',
@@ -26,10 +24,6 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
     } as const;
     const dueDate = new Date(task.dueDate);
     const dueDateString = dueDate.toLocaleDateString('en-US', dateOptions);
-
-    const goToEdit = () => {
-        navigate(`/tasks/edit/${task._id}`)
-    }
 
     const changeTaskCompletionHandler = () => {
         changeTaskCompletion(task._id, !task.completed)
@@ -135,9 +129,12 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                                     <FontAwesomeIcon icon={faCheck}/>
                                 </Button>
                             }
-                            <Button className="me-2" variant="outline-primary" onClick={goToEdit}>
-                                <FontAwesomeIcon icon={faEdit}/>
-                            </Button>
+
+                            <Link replace={false} to={`/tasks/edit/${task._id}`}>
+                                <Button className="me-2" variant="outline-primary">
+                                    <FontAwesomeIcon icon={faEdit}/>
+                                </Button>
+                            </Link>
                             <Button variant="outline-danger" onClick={showModal}>
                                 <FontAwesomeIcon icon={faTrash}/>
                             </Button>

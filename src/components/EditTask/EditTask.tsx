@@ -36,7 +36,7 @@ const EditTask: FC<EditTaskProps> = () => {
         e.preventDefault()
         try {
             await axios.put(`tasks/${id}`, task)
-            navigate("/tasks/user/all")
+            navigate(-1)
         } catch (error: any) {
             if (error.response && error.response.status >= 400 && error.response.status <= 500) {
                 setError(error.response.data.message)
