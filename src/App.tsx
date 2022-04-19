@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {Dispatch, SetStateAction, useEffect} from 'react';
 import './App.scss';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
@@ -13,40 +13,62 @@ import TaskList from "./components/TaskList/TaskList";
 import AccountDetails from "./components/AccountDetails/AccountDetails";
 import AccountDetailsEdit from "./components/AccountDetailsEdit/AccountDetailsEdit";
 import Error404 from "./components/Error404/Error404";
+import {isTokenExpired} from "./helpers/token-helper";
+
+export const TokenContext = React.createContext<{ token: string; setToken: Dispatch<SetStateAction<string>>; }>(
+    {
+        token: '',
+        setToken: () => {
+        }
+    }
+);
 
 function App() {
-    const token = localStorage.getItem("token")
+    const [token, setToken] = React.useState<string>('');
 
     useEffect(() => {
         document.title = "Task Tracker"
+
+        const handleToken = () => {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            if (isTokenExpired(token))
+                localStorage.removeItem('token');
+            else
+                setToken(token);
+        };
+        handleToken();
     }, []);
 
     return (
-        <Layout>
-            <Routes>
-                <Route path="/" element={<Home/>}/>
+        <TokenContext.Provider value={{token, setToken}}>
+            <Layout>
+                <Routes>
+                    <Route path="/" element={<Home/>}/>
 
-                <Route path="/register" element={<Register/>}/>
-                <Route path="/login" element={<Login/>}/>
+                    <Route path="/register" element={<Register/>}/>
+                    <Route path="/login" element={<Login/>}/>
 
-                {token && <Route path="/tasks/create" element={<AddTask/>}/>}
-                <Route path="/tasks/create" element={<Navigate replace to="/login"/>}/>
+                    {token && <Route path="/tasks/create" element={<AddTask/>}/>}
+                    <Route path="/tasks/create" element={<Navigate replace to="/login"/>}/>
 
-                {token && <Route path="/tasks/user/all/*" element={<TaskList/>}/>}
-                <Route path="/tasks/user/all/*" element={<Navigate replace to="/login"/>}/>
+                    {token && <Route path="/tasks/user/all/*" element={<TaskList/>}/>}
+                    <Route path="/tasks/user/all/*" element={<Navigate replace to="/login"/>}/>
 
-                {token && <Route path="/tasks/edit/:id" element={<EditTask/>}/>}
-                <Route path="/tasks/edit/:id" element={<Navigate replace to="/login"/>}/>
+                    {token && <Route path="/tasks/edit/:id" element={<EditTask/>}/>}
+                    <Route path="/tasks/edit/:id" element={<Navigate replace to="/login"/>}/>
 
-                {token && <Route path="/account" element={<AccountDetails/>}/>}
-                <Route path="/account" element={<Navigate replace to="/login"/>}/>
+                    {token && <Route path="/account" element={<AccountDetails/>}/>}
+                    <Route path="/account" element={<Navigate replace to="/login"/>}/>
 
-                {token && <Route path="/account/edit" element={<AccountDetailsEdit/>}/>}
-                <Route path="/account/edit" element={<Navigate replace to="/login"/>}/>
+                    {token && <Route path="/account/edit" element={<AccountDetailsEdit/>}/>}
+                    <Route path="/account/edit" element={<Navigate replace to="/login"/>}/>
 
-                <Route path="*" element={<Error404/>}/>
-            </Routes>
-        </Layout>
+                    <Route path="*" element={<Error404/>}/>
+                </Routes>
+            </Layout>
+        </TokenContext.Provider>
     );
 }
 

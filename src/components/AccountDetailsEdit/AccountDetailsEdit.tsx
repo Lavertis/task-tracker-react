@@ -1,11 +1,11 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {User} from "../../types/User";
 import axios from "../../api/axios";
 import {AxiosResponse} from "axios";
-import {logout} from "../../helpers/logout";
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, Col, Form} from "react-bootstrap";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import {TokenContext} from "../../App";
 
 
 interface AccountDetailsEditProps {
@@ -22,12 +22,19 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     })
     const [newData, setNewData] = React.useState<User>({_id: "", email: "", firstName: "", lastName: "", password: ""})
     const [error, setError] = useState("")
+    const {setToken} = useContext(TokenContext);
 
     const handleTextChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
         setNewData({...newData, [input.name]: input.value})
     }
 
     const handleDelete = () => {
+        const logout = () => {
+            localStorage.removeItem("token")
+            setToken('');
+            navigate('/')
+        };
+
         axios.delete(`users`)
             .then((response: AxiosResponse) => {
                 console.log(response)

@@ -1,13 +1,22 @@
-import React, {FC} from 'react';
+import React, {FC, useContext} from 'react';
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from "react-router-bootstrap";
-import {logout} from "../../helpers/logout";
+import {TokenContext} from "../../App";
+import {getClaimFromToken} from "../../helpers/token-helper";
+import {useNavigate} from "react-router-dom";
 
 interface NavbarProps {
 }
 
 const MyNavbar: FC<NavbarProps> = () => {
-    const token = localStorage.getItem("token");
+    const {token, setToken} = useContext(TokenContext);
+    const navigate = useNavigate();
+
+    const logout = () => {
+        localStorage.removeItem("token")
+        setToken('');
+        navigate('/')
+    };
 
     const getAuthLinks = () => {
         return (
@@ -23,7 +32,7 @@ const MyNavbar: FC<NavbarProps> = () => {
     }
 
     const getUserDropdown = () => {
-        const email = token ? JSON.parse(atob(token.split('.')[1])).email : null;
+        const email = getClaimFromToken(token, 'email');
 
         return (
             <NavDropdown title={email} align={"end"}>
