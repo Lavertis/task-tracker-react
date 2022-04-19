@@ -20,6 +20,9 @@ const TaskList: FC<TaskListProps> = () => {
         axios.delete(`/tasks/${id}`)
             .then(() => {
                 const fetchUserTasks = async () => {
+                    if (tasks.length === 1 && currentPage > 1) {
+                        setCurrentPage(currentPage - 1);
+                    }
                     try {
                         const url = `tasks/auth/all/?page=${currentPage}&limit=${tasksPerPage}`;
                         const response = await axios.get(url);
