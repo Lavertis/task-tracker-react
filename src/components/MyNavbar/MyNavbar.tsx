@@ -8,7 +8,7 @@ interface NavbarProps {
 }
 
 const MyNavbar: FC<NavbarProps> = () => {
-    const token = useContext(TokenContext);
+    const {token} = useContext(TokenContext);
 
     const logout = () => {
         localStorage.removeItem("token")

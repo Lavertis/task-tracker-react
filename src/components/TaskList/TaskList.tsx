@@ -98,7 +98,6 @@ const TaskList: FC<TaskListProps> = () => {
         const url = `tasks/auth/all?page=${page}&limit=${tasksPerPage}`;
         axios.get(url)
             .then((response: AxiosResponse) => {
-                console.log(response.data)
                 setTasks(response.data.tasks);
                 setTasksFetched(true);
                 setPageCount(Math.ceil(response.data.totalCount / tasksPerPage));
