@@ -28,7 +28,7 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                 localStorage.setItem("token", res.data)
                 setToken(res.data)
                 axios.defaults.headers.common['Authorization'] = `Bearer ${res.data}`;
-                navigate(redirectTo)
+                navigate(redirectTo, {replace: true})
             })
             .catch((err: AxiosError) => {
                 if (err.response && err.response.status >= 400 && err.response.status <= 500) {

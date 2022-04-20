@@ -53,7 +53,7 @@ const EditTask: FC<EditTaskProps> = () => {
                 description: data.description,
                 completed: data.completed,
                 priority: data.priority,
-                dueDate: moment(data.dueDate).format("YYYY-MM-DDTkk:mm"),
+                dueDate: moment(data.dueDate).format("YYYY-MM-DDTHH:mm"),
             }
             setTask(task)
         }
