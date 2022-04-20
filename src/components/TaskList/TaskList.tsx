@@ -2,7 +2,7 @@ import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Task} from "../../types/Task";
 import TaskListItem from "../TaskListItem/TaskListItem";
 import axios from "../../api/axios";
-import {Accordion, Alert, Col, Pagination} from "react-bootstrap";
+import {Accordion, Alert, Col, Form, Pagination} from "react-bootstrap";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {AxiosError, AxiosResponse} from "axios";
 
@@ -18,11 +18,12 @@ const TaskList: FC<TaskListProps> = () => {
     const [pageCount, setPageCount] = useState<number>(0);
     const [tasksFetched, setTasksFetched] = useState<boolean>(false);
     const [tasksPerPage] = useState<number>(parseInt(searchParams.get('limit') ?? '10'));
+    const [hideCompleted, setHideCompleted] = useState<boolean>(searchParams.get('hideCompleted') === 'true');
 
     const getTaskListItems = () => {
         if (tasks.length === 0 && tasksFetched) {
             return (
-                <Alert variant="primary" className="text-center">
+                <Alert variant="primary" className="text-center mb-0">
                     <p className="my-auto fs-4">You have no tasks</p>
                 </Alert>
             )
@@ -95,7 +96,7 @@ const TaskList: FC<TaskListProps> = () => {
     };
 
     const fetchTasks = useCallback(() => {
-        const url = `tasks/auth/all?page=${page}&limit=${tasksPerPage}`;
+        const url = `tasks/auth/all?page=${page}&limit=${tasksPerPage}&hideCompleted=${hideCompleted}`;
         axios.get(url)
             .then((response: AxiosResponse) => {
                 setTasks(response.data.tasks);
@@ -105,16 +106,30 @@ const TaskList: FC<TaskListProps> = () => {
             .catch((error: AxiosError) => {
                 console.log(error);
             })
-    }, [page, tasksPerPage]);
+    }, [page, tasksPerPage, hideCompleted]);
 
     useEffect(() => {
         fetchTasks();
-        navigate(`?page=${page}&limit=${tasksPerPage}`);
-    }, [page, fetchTasks, navigate, tasksPerPage]);
+        navigate(`?page=${page}&limit=${tasksPerPage}&hideCompleted=${hideCompleted}`);
+    }, [page, fetchTasks, navigate, tasksPerPage, hideCompleted]);
 
     return (
         <>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-5 shadow shadow-sm">
+            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-4 shadow-sm card p-3">
+                <Form.Switch
+                    type="checkbox"
+                    id="hideCompleted"
+                    name="hideCompleted"
+                    label="Hide completed tasks"
+                    className="my-auto"
+                    checked={hideCompleted}
+                    onChange={() => {
+                        setPage(1);
+                        setHideCompleted(!hideCompleted);
+                    }}
+                />
+            </Col>
+            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mb-5 shadow-sm">
                 <Accordion defaultActiveKey="0" alwaysOpen>
                     {getTaskListItems()}
                 </Accordion>
