@@ -3,7 +3,7 @@ import {User} from "../../types/User";
 import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, Col, Form} from "react-bootstrap";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import useAxios from "../../hooks/useAxios";
 import {TokenContext} from "../../App";
 
@@ -131,7 +131,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                     </Button>
                 </Form.Group>
             </Form>
-            <ConfirmationModal
+            <DeleteConfirmationModal
                 title={"Delete confirmation"}
                 message={"Are you sure you want to delete your account?"}
                 isShown={modalIsShown}

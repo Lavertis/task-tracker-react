@@ -1,10 +1,10 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {Task} from "../../types/Task";
-import TaskListItem from "../TaskListItem/TaskListItem";
+import {Task} from "../../../types/Task";
+import TaskListItem from "./TaskListItem";
 import {Accordion, Alert, Col, Form, Pagination} from "react-bootstrap";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {AxiosError, AxiosResponse} from "axios";
-import useAxios from "../../hooks/useAxios";
+import useAxios from "../../../hooks/useAxios";
 
 
 interface TaskListProps {

@@ -1,18 +1,17 @@
 import React, {Dispatch, SetStateAction, useEffect} from 'react';
 import './App.scss';
-import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import {Route, Routes, useLocation} from "react-router-dom";
 import Layout from "./components/Layout/Layout";
-import Register from "./components/Register/Register";
-import EditTask from "./components/EditTask/EditTask";
-import Login from "./components/Login/Login";
-import Home from "./components/Home/Home";
-import AddTask from "./components/AddTask/AddTask";
-import TaskList from "./components/TaskList/TaskList";
-import AccountDetails from "./components/AccountDetails/AccountDetails";
-import AccountDetailsEdit from "./components/AccountDetailsEdit/AccountDetailsEdit";
-import Error404 from "./components/Error404/Error404";
+import Register from "./components/Auth/Register";
+import EditTask from "./components/Task/EditTask";
+import Login from "./components/Auth/Login";
+import Home from "./components/Home";
+import AddTask from "./components/Task/AddTask";
+import TaskList from "./components/Task/TaskList/TaskList";
+import AccountDetails from "./components/Account/AccountDetails";
+import AccountDetailsEdit from "./components/Account/AccountDetailsEdit";
+import Error404 from "./components/Errors/Error404";
 import {isTokenExpired} from "./helpers/token-helper";
 
 export const TokenContext = React.createContext<{ token: string; setToken: Dispatch<SetStateAction<string>>; }>(

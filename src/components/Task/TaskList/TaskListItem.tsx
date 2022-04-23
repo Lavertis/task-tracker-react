@@ -1,9 +1,9 @@
 import React, {FC, useState} from 'react';
-import {Task} from "../../types/Task";
+import {Task} from "../../../types/Task";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
-import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import DeleteConfirmationModal from "../../Modals/DeleteConfirmationModal";
 import {Accordion, Button, Col} from "react-bootstrap";
 import Countdown from "react-countdown";
 
@@ -70,7 +70,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
         seconds: number
         completed: boolean
     }
-    const timerRenderer = ({days, hours, minutes, seconds, completed}: timerRendererProps) => {
+    const timerRenderer = ({days, hours, completed}: timerRendererProps) => {
         let str = '';
         if (completed) {
             return str;
@@ -142,7 +142,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                     </div>
                 </Accordion.Body>
             </Accordion.Item>
-            <ConfirmationModal
+            <DeleteConfirmationModal
                 title={"Delete confirmation"}
                 message={"Are you sure you want to delete this task?"}
                 isShown={modalIsShown}
