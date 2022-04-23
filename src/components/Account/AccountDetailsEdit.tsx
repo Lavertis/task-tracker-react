@@ -12,7 +12,7 @@ interface AccountDetailsEditProps {
 }
 
 const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
-    const {token, setToken} = useContext(TokenContext)
+    const {setToken} = useContext(TokenContext)
     const axios = useAxios()
     const navigate = useNavigate()
     const [currentData, setCurrentData] = useState<User>({
@@ -60,9 +60,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     }
 
     useEffect(() => {
-        const id = token ? JSON.parse(atob(token.split('.')[1]))._id : null;
-
-        axios.get(`users/${id}`)
+        axios.get(`users/auth`)
             .then((res: AxiosResponse) => {
                 setCurrentData(res.data)
             })
@@ -73,7 +71,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     const showModal = () => setModalIsShown(true);
 
     return (
-        <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
+        <Col xs={11} sm={8} md={6} lg={5} xl={4} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
             <Form>
                 {error && <Alert variant="danger" className="text-center">{error}</Alert>}
                 <Form.Group className="mb-3">

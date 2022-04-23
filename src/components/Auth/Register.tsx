@@ -8,6 +8,8 @@ interface RegisterProps {
 }
 
 const Register: FC<RegisterProps> = () => {
+    const axios = useAxios()
+    const navigate = useNavigate()
     const [data, setData] = useState({
         firstName: "",
         lastName: "",
@@ -15,8 +17,6 @@ const Register: FC<RegisterProps> = () => {
         password: "",
     })
     const [error, setError] = useState("")
-    const axios = useAxios()
-    const navigate = useNavigate()
 
     const handleChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
         setData({...data, [input.name]: input.value})

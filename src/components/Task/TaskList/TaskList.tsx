@@ -11,8 +11,8 @@ interface TaskListProps {
 }
 
 const TaskList: FC<TaskListProps> = () => {
-    const navigate = useNavigate()
     const axios = useAxios()
+    const navigate = useNavigate()
     const [searchParams] = useSearchParams();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [page, setPage] = useState<number>(parseInt(searchParams.get('page') ?? '1'));

@@ -7,8 +7,8 @@ interface Error404Props {
 }
 
 const Error404: FC<Error404Props> = () => {
-    const [counter, setCounter] = useState(5);
     const navigate = useNavigate()
+    const [counter, setCounter] = useState(5);
 
     useEffect(() => {
         const timer = counter > 0 && setInterval(() => setCounter(counter - 1), 1000);
