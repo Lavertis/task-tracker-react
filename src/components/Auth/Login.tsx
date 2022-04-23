@@ -1,6 +1,5 @@
 import React, {FC, useContext, useState} from 'react';
 import {Alert, Button, Col, FloatingLabel, Form} from "react-bootstrap";
-import {AxiosError, AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {TokenContext} from "../../App";
 import useAxios from "../../hooks/useAxios";
@@ -28,16 +27,16 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
             password: ''
         },
         validationSchema: loginValidationSchema,
-        onSubmit: values => {
+        onSubmit: async (values) => {
             axios.post("auth", values)
-                .then((response: AxiosResponse) => {
+                .then(response => {
                     setToken(response.data.jwtToken)
                     localStorage.setItem("jwtToken", response.data.jwtToken)
                     navigate(redirectTo)
                 })
-                .catch((err: AxiosError) => {
-                    if (err.response && err.response.status >= 400 && err.response.status <= 500) {
-                        setServerError(err.response.data.message)
+                .catch(error => {
+                    if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+                        setServerError(error.response.data.message)
                     }
                 })
         },
@@ -51,7 +50,6 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                     <Form.Control
                         type="email"
                         name="email"
-                        id="inputEmail"
                         placeholder="name@domain.com"
                         onChange={formik.handleChange}
                         value={formik.values.email}
@@ -60,11 +58,10 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                     />
                     <Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
                 </FloatingLabel>
-                <FloatingLabel controlId="inputPassword" label="Password" className="mb-4">
+                <FloatingLabel controlId="inputPassword" label="Password" className="mb-3">
                     <Form.Control
                         type="password"
                         name="password"
-                        id="inputPassword"
                         placeholder="Password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
@@ -73,7 +70,7 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                     />
                     <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>
                 </FloatingLabel>
-                <Form.Group className="d-grid">
+                <Form.Group className="d-grid mt-4">
                     <Button type="submit" variant="primary">Login</Button>
                 </Form.Group>
             </Form>

@@ -5,7 +5,6 @@ import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
 import YupPassword from 'yup-password'
 import {useFormik} from "formik";
-import {AxiosError} from "axios";
 
 YupPassword(yup);
 
@@ -34,14 +33,14 @@ const Register: FC<RegisterProps> = () => {
             lastName: ''
         },
         validationSchema: registerValidationSchema,
-        onSubmit: values => {
+        onSubmit: async (values) => {
             axios.post("users", values)
                 .then(() => {
                     navigate("/login")
                 })
-                .catch((err: AxiosError) => {
-                    if (err.response && err.response.status >= 400 && err.response.status <= 500) {
-                        setServerError(err.response.data.message)
+                .catch(error => {
+                    if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+                        setServerError(error.response.data.message)
                     }
                 })
         },
@@ -55,7 +54,6 @@ const Register: FC<RegisterProps> = () => {
                     <Form.Control
                         type="email"
                         name="email"
-                        id="inputEmail"
                         placeholder="name@domain.com"
                         onChange={formik.handleChange}
                         value={formik.values.email}
@@ -71,7 +69,6 @@ const Register: FC<RegisterProps> = () => {
                     <Form.Control
                         type="password"
                         name="password"
-                        id="inputPassword"
                         placeholder="Password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
@@ -84,46 +81,39 @@ const Register: FC<RegisterProps> = () => {
                     <Form.Control
                         type="password"
                         name="passwordConfirmation"
-                        id="inputPasswordConfirmation"
                         placeholder="Password confirmation"
                         onChange={formik.handleChange}
                         value={formik.values.passwordConfirmation}
                         isValid={formik.touched.passwordConfirmation && !formik.errors.passwordConfirmation}
                         isInvalid={formik.touched.passwordConfirmation && !!formik.errors.passwordConfirmation}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        {formik.errors.passwordConfirmation}
-                    </Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">{formik.errors.passwordConfirmation}</Form.Control.Feedback>
                 </FloatingLabel>
                 <FloatingLabel controlId="inputFirstName" label="First name" className="mb-3">
                     <Form.Control
                         type="text"
                         name="firstName"
-                        id="inputFirstName"
                         placeholder="First name"
                         onChange={formik.handleChange}
                         value={formik.values.firstName}
+                        isValid={formik.touched.firstName && !formik.errors.firstName}
                         isInvalid={formik.touched.firstName && !!formik.errors.firstName}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        {formik.errors.firstName}
-                    </Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">{formik.errors.firstName}</Form.Control.Feedback>
                 </FloatingLabel>
-                <FloatingLabel controlId="inputLastName" label="Last name" className="mb-4">
+                <FloatingLabel controlId="inputLastName" label="Last name" className="mb-3">
                     <Form.Control
                         type="text"
                         name="lastName"
-                        id="inputLastName"
                         placeholder="Last name"
                         onChange={formik.handleChange}
                         value={formik.values.lastName}
+                        isValid={formik.touched.lastName && !formik.errors.lastName}
                         isInvalid={formik.touched.lastName && !!formik.errors.lastName}
                     />
-                    <Form.Control.Feedback type="invalid">
-                        {formik.errors.lastName}
-                    </Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid">{formik.errors.lastName}</Form.Control.Feedback>
                 </FloatingLabel>
-                <Form.Group className="d-grid">
+                <Form.Group className="d-grid mt-4">
                     <Button type="submit" variant="primary">Register</Button>
                 </Form.Group>
             </Form>
