@@ -116,7 +116,7 @@ const TaskList: FC<TaskListProps> = () => {
 
     return (
         <>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mt-5 mb-4 shadow-sm card p-3">
+            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mb-4 shadow-sm card p-3">
                 <Form.Switch
                     type="checkbox"
                     id="hideCompleted"
@@ -135,7 +135,7 @@ const TaskList: FC<TaskListProps> = () => {
                     {getTaskListItems()}
                 </Accordion>
             </Col>
-            <Pagination className="mt-auto mb-5 d-flex justify-content-center">
+            <Pagination className="mt-auto d-flex justify-content-center">
                 {getPaginationItems()}
             </Pagination>
         </>

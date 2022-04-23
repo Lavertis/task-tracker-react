@@ -46,7 +46,7 @@ const MyNavbar: FC<NavbarProps> = () => {
     }
 
     return (
-        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark">
+        <Navbar collapseOnSelect expand="lg" bg="primary" variant="dark" className="mb-5">
             <Container fluid>
                 <Navbar.Brand>Task Tracker</Navbar.Brand>
                 <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
