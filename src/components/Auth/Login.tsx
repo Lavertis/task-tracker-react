@@ -8,8 +8,8 @@ import {useFormik} from "formik";
 import * as yup from "yup";
 
 const loginValidationSchema = yup.object().shape({
-    email: yup.string().email().required(),
-    password: yup.string().required()
+    email: yup.string().email().required().label('Email'),
+    password: yup.string().required().label('Password')
 });
 
 interface LoginProps {
@@ -64,7 +64,7 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                         </Form.Control.Feedback>
                     </InputGroup>
                 </Form.Group>
-                <Form.Group className="mb-3">
+                <Form.Group className="mb-4">
                     <Form.Label htmlFor="inputPassword">Password</Form.Label>
                     <InputGroup hasValidation>
                         <Form.Control
