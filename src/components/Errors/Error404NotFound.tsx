@@ -3,10 +3,10 @@ import {useNavigate} from "react-router-dom";
 import {Alert, Col} from "react-bootstrap";
 
 
-interface Error404Props {
+interface Error404NotFoundProps {
 }
 
-const Error404: FC<Error404Props> = () => {
+const Error404NotFound: FC<Error404NotFoundProps> = () => {
     const navigate = useNavigate()
     const [counter, setCounter] = useState(5);
 
@@ -30,4 +30,4 @@ const Error404: FC<Error404Props> = () => {
     );
 }
 
-export default Error404;
+export default Error404NotFound;
