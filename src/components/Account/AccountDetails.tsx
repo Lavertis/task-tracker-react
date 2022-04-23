@@ -23,7 +23,7 @@ const AccountDetails: FC<AccountDetailsProps> = () => {
             .then((res: AxiosResponse) => {
                 setUser(res.data)
             })
-    }, [])
+    }, [axios])
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">

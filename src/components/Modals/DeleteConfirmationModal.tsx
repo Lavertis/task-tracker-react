@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {Button, Modal} from "react-bootstrap";
 
 
-interface DeleteConfirmationModal {
+interface DeleteConfirmationModalProps {
     title: string;
     message: string;
     isShown: boolean;
@@ -10,7 +10,7 @@ interface DeleteConfirmationModal {
     hide: () => void;
 }
 
-const DeleteConfirmationModal: FC<DeleteConfirmationModal> = ({title, message, isShown, confirm, hide}) => (
+const DeleteConfirmationModal: FC<DeleteConfirmationModalProps> = ({title, message, isShown, confirm, hide}) => (
     <Modal show={isShown} onHide={hide}>
         <Modal.Header closeButton>
             <Modal.Title>{title}</Modal.Title>

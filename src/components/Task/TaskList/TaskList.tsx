@@ -107,7 +107,7 @@ const TaskList: FC<TaskListProps> = () => {
             .catch((error: AxiosError) => {
                 console.log(error);
             })
-    }, [page, tasksPerPage, hideCompleted]);
+    }, [axios, page, tasksPerPage, hideCompleted]);
 
     useEffect(() => {
         fetchTasks();

@@ -10,7 +10,7 @@ const addTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(20).label('Title'),
     description: yup.string().required().max(120).label('Description'),
     priority: yup.number().required().min(1).max(3).label('Priority'),
-    dueDate: yup.date().required().min(moment().format("YYYY-MM-DD HH:mm")).label('Due date'),
+    dueDate: yup.date().required().min(moment().format("YYYY-MM-DD HH:mm")).label('Due date')
 });
 
 interface AddTaskProps {
@@ -45,7 +45,7 @@ const AddTask: FC<AddTaskProps> = () => {
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
             {serverError && <Alert variant="danger" className="text-center">{serverError}</Alert>}
-            <Form onSubmit={formik.handleSubmit}>
+            <Form onSubmit={formik.handleSubmit} noValidate>
                 <FloatingLabel controlId="inputTitle" label="Title" className="mb-3">
                     <Form.Control
                         type="text"

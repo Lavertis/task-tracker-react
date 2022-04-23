@@ -64,7 +64,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
             .then((res: AxiosResponse) => {
                 setCurrentData(res.data)
             })
-    }, [])
+    }, [axios])
 
     const [modalIsShown, setModalIsShown] = useState(false);
     const hideModal = () => setModalIsShown(false);

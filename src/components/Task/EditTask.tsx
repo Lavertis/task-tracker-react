@@ -1,9 +1,17 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import moment from "moment";
-import {Alert, Button, ButtonGroup, Col, Form} from "react-bootstrap";
+import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form} from "react-bootstrap";
 import useAxios from "../../hooks/useAxios";
+import * as yup from "yup";
+import {useFormik} from "formik";
 
+const editTaskValidationSchema = yup.object().shape({
+    title: yup.string().required().min(3).max(20).label('Title'),
+    description: yup.string().required().max(120).label('Description'),
+    priority: yup.number().required().min(1).max(3).label('Priority'),
+    dueDate: yup.date().required().label('Due date')
+});
 
 interface EditTaskProps {
 }
@@ -12,116 +20,115 @@ const EditTask: FC<EditTaskProps> = () => {
     const {id} = useParams();
     const axios = useAxios()
     const navigate = useNavigate()
-    const [task, setTask] = useState({
-        title: '',
-        description: '',
-        priority: 0,
-        completed: false,
-        dueDate: ''
-    });
-    const [error, setError] = useState("")
+    const [serverError, setServerError] = useState("")
 
-    const handleTextChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement>) => {
-        setTask({...task, [input.name]: input.value})
-    };
-
-    const changePriority = (priority: number) => {
-        setTask({...task, priority: priority})
-    }
-
-    const changeCompleted = (completed: boolean) => {
-        setTask({...task, completed: completed})
-    }
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault()
-        try {
-            await axios.put(`tasks/${id}`, task)
-            navigate(-1)
-        } catch (error: any) {
-            if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                setError(error.response.data.message)
-            }
+    const formik = useFormik({
+        initialValues: {
+            title: '',
+            description: '',
+            priority: 0,
+            completed: false,
+            dueDate: ''
+        },
+        validationSchema: editTaskValidationSchema,
+        onSubmit: async (values) => {
+            axios.put(`tasks/${id}`, values)
+                .then(() => {
+                    navigate(-1)
+                })
+                .catch(error => {
+                    if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+                        setServerError(error.response.data.message)
+                    }
+                })
         }
-    }
+    })
 
     useEffect(() => {
-        const fetchTask = async () => {
-            const response = await axios.get(`tasks/${id}`);
-            const data = response.data
-            const task = {
-                title: data.title,
-                description: data.description,
-                completed: data.completed,
-                priority: data.priority,
-                dueDate: moment(data.dueDate).format("YYYY-MM-DDTHH:mm"),
-            }
-            setTask(task)
-        }
-        fetchTask().then()
-    }, [id]);
+        axios.get(`tasks/${id}`)
+            .then(response => {
+                response.data.dueDate = moment(response.data.dueDate).format("YYYY-MM-DDTHH:mm")
+                formik.setValues(response.data)
+            })
+            .catch(error => {
+                if (error.response && error.response.status >= 400 && error.response.status <= 500) {
+                    setServerError(error.response.data.message)
+                }
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [axios, id]);
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
-            {error && <Alert variant="danger" className="text-center">{error}</Alert>}
-            <Form onSubmit={handleSubmit}>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="inputTitle">Title</Form.Label>
+            {serverError && <Alert variant="danger" className="text-center">{serverError}</Alert>}
+            <Form onSubmit={formik.handleSubmit}>
+                <FloatingLabel controlId="inputTitle" label="Title" className="mb-3">
                     <Form.Control
                         type="text"
-                        id="inputTitle"
                         name="title"
-                        onChange={handleTextChange}
-                        value={task.title}
-                        required
+                        placeholder="Title"
+                        onChange={formik.handleChange}
+                        value={formik.values.title}
+                        isValid={formik.touched.title && !formik.errors.title}
+                        isInvalid={formik.touched.title && !!formik.errors.title}
                     />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="inputDescription">Description</Form.Label>
+                    <Form.Control.Feedback type="invalid">{formik.errors.title}</Form.Control.Feedback>
+                </FloatingLabel>
+                <FloatingLabel controlId="inputDescription" label="Description" className="mb-3">
                     <Form.Control
                         as="textarea"
-                        rows={3}
-                        id="inputDescription"
                         name="description"
-                        onChange={handleTextChange}
-                        value={task.description}
-                        required
+                        placeholder="Description"
+                        onChange={formik.handleChange}
+                        value={formik.values.description}
+                        isValid={formik.touched.description && !formik.errors.description}
+                        isInvalid={formik.touched.description && !!formik.errors.description}
+                        style={{height: '100px'}}
                     />
-                </Form.Group>
+                    <Form.Control.Feedback type="invalid">{formik.errors.description}</Form.Control.Feedback>
+                </FloatingLabel>
                 <Form.Group className="mb-3">
                     <Form.Label htmlFor="inputDueDate">Due date</Form.Label>
                     <Form.Control
                         type="datetime-local"
                         id="inputDueDate"
                         name="dueDate"
-                        onChange={handleTextChange}
-                        value={task.dueDate}
-                        required
+                        onChange={formik.handleChange}
+                        value={formik.values.dueDate}
+                        isValid={formik.touched.dueDate && !formik.errors.dueDate}
+                        isInvalid={formik.touched.dueDate && !!formik.errors.dueDate}
                     />
+                    <Form.Control.Feedback type="invalid">{formik.errors.dueDate}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="mb-3">
                     <Form.Label htmlFor="inputPriority">Priority</Form.Label>
                     <ButtonGroup className="mb-3 d-flex" id="inputPriority">
                         <Button
                             variant="outline-primary"
-                            active={task.priority === 1}
-                            value={1}
-                            onClick={() => changePriority(1)}>
+                            name="priority"
+                            active={formik.values.priority === 1}
+                            onClick={() => formik.setFieldValue('priority', 1)}
+                        >
                             Low
                         </Button>
                         <Button
                             variant="outline-primary"
-                            active={task.priority === 2}
-                            onClick={() => changePriority(2)}>
+                            name="priority"
+                            active={formik.values.priority === 2}
+                            onClick={() => formik.setFieldValue('priority', 2)}
+                        >
                             Medium
                         </Button>
                         <Button
                             variant="outline-primary"
-                            active={task.priority === 3}
-                            onClick={() => changePriority(3)}>
+                            name="priority"
+                            active={formik.values.priority === 3}
+                            onClick={() => formik.setFieldValue('priority', 3)}
+                        >
                             High
                         </Button>
                     </ButtonGroup>
+                    <Form.Control.Feedback type="invalid">{formik.errors.priority}</Form.Control.Feedback>
                 </Form.Group>
                 <Form.Group className="d-flex justify-content-center">
                     <Form.Check
@@ -129,8 +136,8 @@ const EditTask: FC<EditTaskProps> = () => {
                         id="custom-switch"
                         label="Completed"
                         className="mb-3"
-                        checked={task.completed}
-                        onChange={(e) => changeCompleted(e.target.checked)}
+                        checked={formik.values.completed}
+                        onChange={() => formik.setFieldValue('completed', !formik.values.completed)}
                     />
                 </Form.Group>
                 <Form.Group className="d-grid">
