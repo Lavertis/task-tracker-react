@@ -1,6 +1,6 @@
-const axiosAPI = require('axios');
+import axios from "axios";
 
-const axios = axiosAPI.create({
+const myAxios = axios.create({
     baseURL: 'http://localhost:5000/api',
     timeout: 5000,
     headers: {
@@ -8,12 +8,4 @@ const axios = axiosAPI.create({
     },
 });
 
-(async () => {
-    const token = localStorage.getItem('token');
-    if (token)
-        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    else
-        delete axios.defaults.headers.common['Authorization'];
-})();
-
-export default axios;
+export default myAxios;

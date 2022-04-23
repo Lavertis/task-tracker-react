@@ -3,16 +3,19 @@ import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from "react-router-bootstrap";
 import {TokenContext} from "../../App";
 import {getClaimFromToken} from "../../helpers/token-helper";
+import {useNavigate} from "react-router-dom";
 
 interface NavbarProps {
 }
 
 const MyNavbar: FC<NavbarProps> = () => {
-    const {token} = useContext(TokenContext);
+    const {token, setToken} = useContext(TokenContext);
+    const navigate = useNavigate()
 
     const logout = () => {
-        localStorage.removeItem("token")
-        window.location.href = "/";
+        setToken('')
+        localStorage.removeItem("jwtToken")
+        navigate('/')
     };
 
     const getAuthLinks = () => {

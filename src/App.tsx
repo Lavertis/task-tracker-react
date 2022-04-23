@@ -24,20 +24,16 @@ export const TokenContext = React.createContext<{ token: string; setToken: Dispa
 );
 
 function App() {
-    const [token, setToken] = React.useState<string>(localStorage.getItem('token') ?? '');
+    const [token, setToken] = React.useState<string>(localStorage.getItem('jwtToken') ?? '');
     const location = useLocation();
 
     useEffect(() => {
         document.title = "Task Tracker"
 
-        const checkToken = () => {
-            if (!token) return;
-            if (isTokenExpired(token)) {
-                localStorage.removeItem('token');
-                setToken('');
-            }
-        };
-        checkToken();
+        if (token && isTokenExpired(token)) {
+            localStorage.removeItem('jwtToken');
+            setToken('');
+        }
     }, [token]);
 
     return (

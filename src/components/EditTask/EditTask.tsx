@@ -1,8 +1,8 @@
 import React, {FC, useEffect, useState} from 'react';
 import {useNavigate, useParams} from "react-router-dom";
 import moment from "moment";
-import axios from "../../api/axios";
 import {Alert, Button, ButtonGroup, Col, Form} from "react-bootstrap";
+import useAxios from "../../hooks/useAxios";
 
 
 interface EditTaskProps {
@@ -10,6 +10,7 @@ interface EditTaskProps {
 
 const EditTask: FC<EditTaskProps> = () => {
     const {id} = useParams();
+    const axios = useAxios()
     const navigate = useNavigate()
     const [task, setTask] = useState({
         title: '',

@@ -1,12 +1,13 @@
 import React, {FC, useState} from 'react';
-import axios from '../../api/axios';
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, ButtonGroup, Col, Form} from "react-bootstrap";
+import useAxios from "../../hooks/useAxios";
 
 interface CreateTaskProps {
 }
 
 const AddTask: FC<CreateTaskProps> = () => {
+    const axios = useAxios()
     const navigate = useNavigate()
     const [task, setTask] = useState({
         title: '',

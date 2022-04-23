@@ -1,7 +1,7 @@
 import React, {FC, useState} from 'react';
 import {useNavigate} from "react-router-dom";
-import axios from "../../api/axios";
 import {Alert, Button, Col, Form} from "react-bootstrap";
+import useAxios from "../../hooks/useAxios";
 
 
 interface RegisterProps {
@@ -15,6 +15,7 @@ const Register: FC<RegisterProps> = () => {
         password: "",
     })
     const [error, setError] = useState("")
+    const axios = useAxios()
     const navigate = useNavigate()
 
     const handleChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {

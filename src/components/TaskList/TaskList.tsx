@@ -1,10 +1,10 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Task} from "../../types/Task";
 import TaskListItem from "../TaskListItem/TaskListItem";
-import axios from "../../api/axios";
 import {Accordion, Alert, Col, Form, Pagination} from "react-bootstrap";
 import {useNavigate, useSearchParams} from "react-router-dom";
 import {AxiosError, AxiosResponse} from "axios";
+import useAxios from "../../hooks/useAxios";
 
 
 interface TaskListProps {
@@ -12,6 +12,7 @@ interface TaskListProps {
 
 const TaskList: FC<TaskListProps> = () => {
     const navigate = useNavigate()
+    const axios = useAxios()
     const [searchParams] = useSearchParams();
     const [tasks, setTasks] = useState<Task[]>([]);
     const [page, setPage] = useState<number>(parseInt(searchParams.get('page') ?? '1'));

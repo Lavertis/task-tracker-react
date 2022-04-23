@@ -1,15 +1,18 @@
-import React, {FC, useEffect} from 'react';
+import React, {FC, useContext, useEffect} from 'react';
 import {User} from "../../types/User";
-import axios from "../../api/axios";
 import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {Button, Col, Form} from "react-bootstrap";
+import useAxios from "../../hooks/useAxios";
+import {TokenContext} from "../../App";
 
 
 interface AccountDetailsProps {
 }
 
 const AccountDetails: FC<AccountDetailsProps> = () => {
+    const {token} = useContext(TokenContext)
+    const axios = useAxios()
     const navigate = useNavigate();
     const [user, setUser] = React.useState<User>({_id: "", email: "", firstName: "", lastName: "", password: ""})
 
@@ -18,7 +21,6 @@ const AccountDetails: FC<AccountDetailsProps> = () => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
         const id = token ? JSON.parse(atob(token.split('.')[1]))._id : null;
 
         axios.get(`users/${id}`)

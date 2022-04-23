@@ -1,16 +1,19 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import {User} from "../../types/User";
-import axios from "../../api/axios";
 import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, Col, Form} from "react-bootstrap";
 import ConfirmationModal from "../ConfirmationModal/ConfirmationModal";
+import useAxios from "../../hooks/useAxios";
+import {TokenContext} from "../../App";
 
 
 interface AccountDetailsEditProps {
 }
 
 const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
+    const {token, setToken} = useContext(TokenContext)
+    const axios = useAxios()
     const navigate = useNavigate()
     const [currentData, setCurrentData] = useState<User>({
         _id: "",
@@ -28,8 +31,9 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
 
     const handleDelete = () => {
         const logout = () => {
-            localStorage.removeItem("token")
-            window.location.href = "/";
+            setToken('')
+            localStorage.removeItem("jwtToken")
+            navigate('/')
         };
 
         axios.delete(`users`)
@@ -56,7 +60,6 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     }
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
         const id = token ? JSON.parse(atob(token.split('.')[1]))._id : null;
 
         axios.get(`users/${id}`)

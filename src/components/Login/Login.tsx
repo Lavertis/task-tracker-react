@@ -1,9 +1,9 @@
 import React, {FC, useContext, useState} from 'react';
-import axios from "../../api/axios";
 import {Alert, Button, Col, Form} from "react-bootstrap";
 import {AxiosError, AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {TokenContext} from "../../App";
+import useAxios from "../../hooks/useAxios";
 
 
 interface LoginProps {
@@ -11,9 +11,10 @@ interface LoginProps {
 }
 
 const Login: FC<LoginProps> = ({redirectTo}) => {
+    const axios = useAxios()
+    const navigate = useNavigate()
     const [data, setData] = useState({email: "", password: ""})
     const [error, setError] = useState("")
-    const navigate = useNavigate()
     const {setToken} = useContext(TokenContext)
 
     const handleChange = ({currentTarget: input}: React.ChangeEvent<HTMLInputElement>) => {
@@ -25,10 +26,9 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
 
         axios.post("auth", data)
             .then(({data: res}: AxiosResponse) => {
-                localStorage.setItem("token", res.data)
+                localStorage.setItem("jwtToken", res.data)
                 setToken(res.data)
-                axios.defaults.headers.common['Authorization'] = `Bearer ${res.data}`;
-                navigate(redirectTo, {replace: true})
+                navigate(redirectTo)
             })
             .catch((err: AxiosError) => {
                 if (err.response && err.response.status >= 400 && err.response.status <= 500) {
