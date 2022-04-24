@@ -43,6 +43,9 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                 localStorage.removeItem("jwtToken")
                 navigate('/')
             })
+            .catch(error => {
+                console.log(error);
+            })
     }
 
     const formik = useFormik({

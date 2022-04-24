@@ -1,5 +1,4 @@
 import React, {FC, useEffect} from 'react';
-import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {Button, Col, FloatingLabel, Form} from "react-bootstrap";
 import useAxios from "../../hooks/useAxios";
@@ -16,8 +15,11 @@ const AccountDetails: FC<AccountDetailsProps> = () => {
 
     useEffect(() => {
         axios.get(`users/auth`)
-            .then((res: AxiosResponse) => {
-                setUser(res.data)
+            .then(response => {
+                setUser(response.data)
+            })
+            .catch(error => {
+                console.log(error)
             })
     }, [axios])
 

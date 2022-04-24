@@ -1,11 +1,11 @@
 import React, {FC, useState} from 'react';
-import {Task} from "../../../types/Task";
 import {Link} from "react-router-dom";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faCheck, faEdit, faTrash} from "@fortawesome/free-solid-svg-icons";
 import DeleteConfirmationModal from "../../Modals/DeleteConfirmationModal";
 import {Accordion, Button, Col} from "react-bootstrap";
 import TaskDeadlineCountdown from "./TaskDeadlineCountdown";
+import {Task} from "../../../classes/Task";
 
 const dateOptions = {
     weekday: 'long',

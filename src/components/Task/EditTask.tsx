@@ -7,7 +7,7 @@ import * as yup from "yup";
 import {useFormik} from "formik";
 
 const editTaskValidationSchema = yup.object().shape({
-    title: yup.string().required().min(3).max(20).label('Title'),
+    title: yup.string().required().min(3).max(50).label('Title'),
     description: yup.string().required().max(120).label('Description'),
     priority: yup.number().required().min(1).max(3).label('Priority'),
     dueDate: yup.date().required().label('Due date')
@@ -17,7 +17,7 @@ interface EditTaskProps {
 }
 
 const EditTask: FC<EditTaskProps> = () => {
-    const {id} = useParams();
+    const {taskId} = useParams();
     const axios = useAxios()
     const navigate = useNavigate()
     const [generalError, setGeneralError] = useState("")
@@ -32,7 +32,7 @@ const EditTask: FC<EditTaskProps> = () => {
         },
         validationSchema: editTaskValidationSchema,
         onSubmit: async (values) => {
-            axios.put(`tasks/${id}`, values)
+            axios.put(`tasks/${taskId}`, values)
                 .then(() => {
                     navigate(-1)
                 })
@@ -45,7 +45,7 @@ const EditTask: FC<EditTaskProps> = () => {
     })
 
     useEffect(() => {
-        axios.get(`tasks/${id}`)
+        axios.get(`tasks/${taskId}`)
             .then(response => {
                 response.data.dueDate = moment(response.data.dueDate).format("YYYY-MM-DDTHH:mm")
                 formik.setValues(response.data)
@@ -56,7 +56,7 @@ const EditTask: FC<EditTaskProps> = () => {
                 }
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [axios, id]);
+    }, [axios, taskId]);
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">

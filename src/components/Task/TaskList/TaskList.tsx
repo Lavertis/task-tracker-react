@@ -1,10 +1,9 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {Task} from "../../../types/Task";
 import TaskListItem from "./TaskListItem";
 import {Accordion, Alert, Col, Form, Pagination} from "react-bootstrap";
 import {useNavigate, useSearchParams} from "react-router-dom";
-import {AxiosError, AxiosResponse} from "axios";
 import useAxios from "../../../hooks/useAxios";
+import {Task} from "../../../classes/Task";
 
 
 interface TaskListProps {
@@ -13,13 +12,15 @@ interface TaskListProps {
 const TaskList: FC<TaskListProps> = () => {
     const axios = useAxios()
     const navigate = useNavigate()
+
     const [searchParams] = useSearchParams();
-    const [tasks, setTasks] = useState<Task[]>([]);
     const [page, setPage] = useState<number>(parseInt(searchParams.get('page') ?? '1'));
-    const [pageCount, setPageCount] = useState<number>(0);
-    const [tasksFetched, setTasksFetched] = useState<boolean>(false);
     const [tasksPerPage] = useState<number>(parseInt(searchParams.get('limit') ?? '10'));
     const [hideCompleted, setHideCompleted] = useState<boolean>(searchParams.get('hideCompleted') === 'true');
+
+    const [tasks, setTasks] = useState<Task[]>([]);
+    const [tasksFetched, setTasksFetched] = useState<boolean>(false);
+    const [pageCount, setPageCount] = useState<number>(0);
 
     const getTaskListItems = () => {
         if (tasks.length === 0 && tasksFetched) {
@@ -54,7 +55,7 @@ const TaskList: FC<TaskListProps> = () => {
             }
         };
 
-        if (pageCount === 0) return null
+        if (pageCount === 0) return ''
         return (
             <>
                 <Pagination.First onClick={() => setPage(1)} disabled={page === 1}/>
@@ -74,37 +75,42 @@ const TaskList: FC<TaskListProps> = () => {
         )
     }
 
-    const deleteTask = (id: string) => {
-        axios.delete(`/tasks/${id}`)
+    const deleteTask = (taskId: string) => {
+        axios.delete(`/tasks/${taskId}`)
             .then(() => {
                 if (tasks.length === 1 && page > 1)
                     setPage(page - 1);
-
                 fetchTasks();
-            });
+            })
+            .catch(error => {
+                console.log(error);
+            })
     };
 
-    const changeTaskCompletion = (id: string, completed: boolean) => {
-        axios.patch(`/tasks/${id}`, {completed: completed})
+    const changeTaskCompletion = (taskId: string, completed: boolean) => {
+        axios.patch(`/tasks/${taskId}`, {completed: completed})
             .then(() => {
                 setTasks(tasks.map(task => {
-                    if (task._id === id) {
+                    if (task._id === taskId) {
                         task.completed = completed;
                     }
                     return task;
                 }));
-            });
+            })
+            .catch(error => {
+                console.log(error);
+            })
     };
 
     const fetchTasks = useCallback(() => {
         const url = `tasks/auth/all?page=${page}&limit=${tasksPerPage}&hideCompleted=${hideCompleted}`;
         axios.get(url)
-            .then((response: AxiosResponse) => {
+            .then(response => {
                 setTasks(response.data.tasks);
                 setTasksFetched(true);
                 setPageCount(Math.ceil(response.data.totalCount / tasksPerPage));
             })
-            .catch((error: AxiosError) => {
+            .catch(error => {
                 console.log(error);
             })
     }, [axios, page, tasksPerPage, hideCompleted]);
