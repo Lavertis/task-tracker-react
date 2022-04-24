@@ -83,7 +83,7 @@ const TaskList: FC<TaskListProps> = () => {
                 fetchTasks();
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data.message);
             })
     };
 
@@ -98,7 +98,7 @@ const TaskList: FC<TaskListProps> = () => {
                 }));
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data.message);
             })
     };
 
@@ -111,7 +111,7 @@ const TaskList: FC<TaskListProps> = () => {
                 setPageCount(Math.ceil(response.data.totalCount / tasksPerPage));
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data.message);
             })
     }, [axios, page, tasksPerPage, hideCompleted]);
 

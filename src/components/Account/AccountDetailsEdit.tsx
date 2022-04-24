@@ -44,7 +44,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                 navigate('/')
             })
             .catch(error => {
-                console.log(error);
+                console.log(error.response.data.message);
             })
     }
 
@@ -81,7 +81,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                 {generalError ?
                     <Alert variant="danger" className="text-center mb-4">{generalError}</Alert> :
                     <Alert variant="primary" className="text-center mb-4">
-                        Type in the fields you want to update and press the "Save" button.
+                        Type new values in the fields you want to update and press the "Save" button.
                     </Alert>
                 }
                 <FloatingLabel controlId="inputEmail" label="New email address" className="mb-3">

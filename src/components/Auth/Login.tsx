@@ -53,7 +53,6 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                         placeholder="Email"
                         onChange={formik.handleChange}
                         value={formik.values.email}
-                        isValid={formik.touched.email && !formik.errors.email}
                         isInvalid={formik.touched.email && !!formik.errors.email}
                     />
                     <Form.Control.Feedback type="invalid">{formik.errors.email}</Form.Control.Feedback>
@@ -65,7 +64,6 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                         placeholder="Password"
                         onChange={formik.handleChange}
                         value={formik.values.password}
-                        isValid={formik.touched.password && !formik.errors.password}
                         isInvalid={formik.touched.password && !!formik.errors.password}
                     />
                     <Form.Control.Feedback type="invalid">{formik.errors.password}</Form.Control.Feedback>

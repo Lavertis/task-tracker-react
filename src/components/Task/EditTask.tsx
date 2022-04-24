@@ -8,9 +8,10 @@ import {useFormik} from "formik";
 
 const editTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
-    description: yup.string().required().max(120).label('Description'),
+    description: yup.string().max(120).label('Description'),
+    completed: yup.boolean().required().label('Completed'),
     priority: yup.number().required().min(1).max(3).label('Priority'),
-    dueDate: yup.date().required().label('Due date')
+    dueDate: yup.date().required().label("Due Date")
 });
 
 interface EditTaskProps {

@@ -8,7 +8,7 @@ import moment from "moment";
 
 const addTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
-    description: yup.string().required().max(120).label('Description'),
+    description: yup.string().max(120).label('Description'),
     priority: yup.number().required().min(1).max(3).label('Priority'),
     dueDate: yup.date().required().min(moment().format("YYYY-MM-DD HH:mm")).label('Due date')
 });
