@@ -11,7 +11,10 @@ YupPassword(yup);
 const registerValidationSchema = yup.object().shape({
     email: yup.string().email().required().label('Email'),
     password: yup.string().password().required().label('Password'),
-    passwordConfirmation: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required().label('Password confirmation'),
+    passwordConfirmation: yup.string()
+        .oneOf([yup.ref('password'), null], 'Passwords must match')
+        .required()
+        .label('Password confirmation'),
     firstName: yup.string().required().minUppercase(1).min(2).max(50).label('First name'),
     lastName: yup.string().required().minUppercase(1).min(2).max(50).label('Last name')
 });

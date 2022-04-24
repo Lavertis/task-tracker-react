@@ -61,8 +61,9 @@ const EditTask: FC<EditTaskProps> = () => {
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
+            <h3 className="mb-4">Update task</h3>
             {generalError && <Alert variant="danger" className="text-center">{generalError}</Alert>}
-            <Form onSubmit={formik.handleSubmit}>
+            <Form onSubmit={formik.handleSubmit} noValidate>
                 <FloatingLabel controlId="inputTitle" label="Title" className="mb-3">
                     <Form.Control
                         type="text"
