@@ -23,6 +23,7 @@ const AccountDetails: FC<AccountDetailsProps> = () => {
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
+            <h3 className="mb-4">Account details</h3>
             <Form>
                 <FloatingLabel controlId="inputEmail" label="Email address" className="mb-3">
                     <Form.Control
