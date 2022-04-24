@@ -1,9 +1,9 @@
 import React, {FC, useEffect} from 'react';
-import {User} from "../../types/User";
 import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
-import {Button, Col, Form} from "react-bootstrap";
+import {Button, Col, FloatingLabel, Form} from "react-bootstrap";
 import useAxios from "../../hooks/useAxios";
+import {User} from "../../classes/User";
 
 
 interface AccountDetailsProps {
@@ -12,11 +12,7 @@ interface AccountDetailsProps {
 const AccountDetails: FC<AccountDetailsProps> = () => {
     const axios = useAxios()
     const navigate = useNavigate();
-    const [user, setUser] = React.useState<User>({_id: "", email: "", firstName: "", lastName: "", password: ""})
-
-    const goToEdit = () => {
-        navigate(`/account/edit`)
-    }
+    const [user, setUser] = React.useState<User>(new User())
 
     useEffect(() => {
         axios.get(`users/auth`)
@@ -28,38 +24,35 @@ const AccountDetails: FC<AccountDetailsProps> = () => {
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
             <Form>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="inputEmail">Email address</Form.Label>
+                <FloatingLabel controlId="inputEmail" label="Email address" className="mb-3">
                     <Form.Control
                         type="email"
-                        id="inputEmail"
                         name="email"
-                        defaultValue={user.email}
+                        placeholder="Email"
+                        value={user.email}
                         disabled
                     />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="inputFirstName">First name</Form.Label>
+                </FloatingLabel>
+                <FloatingLabel controlId="inputFirstName" label="First name" className="mb-3">
                     <Form.Control
                         type="text"
-                        id="inputFirstName"
                         name="firstName"
-                        defaultValue={user.firstName}
+                        placeholder="First name"
+                        value={user.firstName}
                         disabled
                     />
-                </Form.Group>
-                <Form.Group className="mb-3">
-                    <Form.Label htmlFor="inputLastName">Last name</Form.Label>
+                </FloatingLabel>
+                <FloatingLabel controlId="inputLastName" label="Last name" className="mb-3">
                     <Form.Control
                         type="text"
-                        id="inputLastName"
                         name="lastName"
-                        defaultValue={user.lastName}
+                        placeholder="Last name"
+                        value={user.lastName}
                         disabled
                     />
-                </Form.Group>
+                </FloatingLabel>
                 <Form.Group className="d-grid d-sm-flex justify-content-sm-end mt-4">
-                    <Button variant="primary" className="col-sm-4" onClick={goToEdit}>
+                    <Button variant="primary" className="col-sm-4" onClick={() => navigate(`/account/edit`)}>
                         Edit
                     </Button>
                 </Form.Group>

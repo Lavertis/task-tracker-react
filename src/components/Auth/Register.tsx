@@ -54,7 +54,7 @@ const Register: FC<RegisterProps> = () => {
                     <Form.Control
                         type="email"
                         name="email"
-                        placeholder="name@domain.com"
+                        placeholder="Email"
                         onChange={formik.handleChange}
                         value={formik.values.email}
                         isValid={formik.touched.email && !formik.errors.email}

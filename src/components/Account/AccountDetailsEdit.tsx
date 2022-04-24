@@ -1,11 +1,11 @@
 import React, {FC, useContext, useEffect, useState} from 'react';
-import {User} from "../../types/User";
 import {AxiosResponse} from "axios";
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, Col, Form} from "react-bootstrap";
 import DeleteConfirmationModal from "../Modals/DeleteConfirmationModal";
 import useAxios from "../../hooks/useAxios";
 import {TokenContext} from "../../App";
+import {User} from "../../classes/User";
 
 
 interface AccountDetailsEditProps {
@@ -15,13 +15,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     const {setToken} = useContext(TokenContext)
     const axios = useAxios()
     const navigate = useNavigate()
-    const [currentData, setCurrentData] = useState<User>({
-        _id: "",
-        email: "",
-        firstName: "",
-        lastName: "",
-        password: ""
-    })
+    const [currentData, setCurrentData] = useState<User>(new User())
     const [newData, setNewData] = React.useState<User>({_id: "", email: "", firstName: "", lastName: "", password: ""})
     const [error, setError] = useState("")
 
