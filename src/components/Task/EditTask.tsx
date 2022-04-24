@@ -20,7 +20,7 @@ const EditTask: FC<EditTaskProps> = () => {
     const {id} = useParams();
     const axios = useAxios()
     const navigate = useNavigate()
-    const [serverError, setServerError] = useState("")
+    const [serverError, setGeneralError] = useState("")
 
     const formik = useFormik({
         initialValues: {
@@ -38,7 +38,7 @@ const EditTask: FC<EditTaskProps> = () => {
                 })
                 .catch(error => {
                     if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                        setServerError(error.response.data.message)
+                        setGeneralError(error.response.data.message)
                     }
                 })
         }
@@ -52,7 +52,7 @@ const EditTask: FC<EditTaskProps> = () => {
             })
             .catch(error => {
                 if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                    setServerError(error.response.data.message)
+                    setGeneralError(error.response.data.message)
                 }
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps

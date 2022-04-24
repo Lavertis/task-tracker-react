@@ -22,7 +22,7 @@ interface RegisterProps {
 const Register: FC<RegisterProps> = () => {
     const axios = useAxios()
     const navigate = useNavigate()
-    const [serverError, setServerError] = useState("")
+    const [serverError, setGeneralError] = useState("")
 
     const formik = useFormik({
         initialValues: {
@@ -40,7 +40,7 @@ const Register: FC<RegisterProps> = () => {
                 })
                 .catch(error => {
                     if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                        setServerError(error.response.data.message)
+                        setGeneralError(error.response.data.message)
                     }
                 })
         },
