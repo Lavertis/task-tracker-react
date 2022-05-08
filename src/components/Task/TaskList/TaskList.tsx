@@ -15,7 +15,7 @@ const TaskList: FC<TaskListProps> = () => {
 
     const [searchParams] = useSearchParams();
     const [page, setPage] = useState<number>(parseInt(searchParams.get('page') ?? '1'));
-    const [tasksPerPage] = useState<number>(parseInt(searchParams.get('tasksPerPage') ?? '10'));
+    const [tasksPerPage, setTasksPerPage] = useState<number>(parseInt(searchParams.get('tasksPerPage') ?? '10'));
     const [hideCompleted, setHideCompleted] = useState<boolean>(searchParams.get('hideCompleted') === 'true');
 
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -102,6 +102,11 @@ const TaskList: FC<TaskListProps> = () => {
             })
     };
 
+    const changeNumberOfTasksPerPage = (numberOfTasksPerPage: number) => {
+        setTasksPerPage(numberOfTasksPerPage)
+        setPage(1);
+    }
+
     const fetchTasks = useCallback(() => {
         const rangeStart = (page - 1) * tasksPerPage
         const rangeEnd = page * tasksPerPage
@@ -124,12 +129,13 @@ const TaskList: FC<TaskListProps> = () => {
 
     return (
         <>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mb-4 shadow-sm card p-3">
+            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5}
+                 className="d-flex flex-row mx-auto mb-4 shadow-sm card p-3 justify-content-between">
                 <Form.Switch
                     type="checkbox"
                     id="hideCompleted"
                     name="hideCompleted"
-                    label="Hide completed tasks"
+                    label="Hide completed"
                     className="my-auto"
                     checked={hideCompleted}
                     onChange={() => {
@@ -137,6 +143,15 @@ const TaskList: FC<TaskListProps> = () => {
                         setHideCompleted(!hideCompleted);
                     }}
                 />
+                <Form.Select
+                    className="w-auto"
+                    onChange={e => changeNumberOfTasksPerPage(parseInt(e.target.value))}
+                    value={tasksPerPage}>
+                    {[5, 10, 15, 20].map(value => (
+                        <option key={value} value={value}>
+                            {value} tasks
+                        </option>))}
+                </Form.Select>
             </Col>
             <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mb-5 shadow-sm">
                 <Accordion defaultActiveKey="0" alwaysOpen>
