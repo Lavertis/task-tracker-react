@@ -17,6 +17,7 @@ const TaskList: FC<TaskListProps> = () => {
     const [page, setPage] = useState<number>(parseInt(searchParams.get('page') ?? '1'));
     const [tasksPerPage, setTasksPerPage] = useState<number>(parseInt(searchParams.get('tasksPerPage') ?? '10'));
     const [hideCompleted, setHideCompleted] = useState<boolean>(searchParams.get('hideCompleted') === 'true');
+    const [searchTitle, setSearchTitle] = useState<string>(searchParams.get('searchTitle') ?? '');
 
     const [tasks, setTasks] = useState<Task[]>([]);
     const [tasksFetched, setTasksFetched] = useState<boolean>(false);
@@ -26,7 +27,7 @@ const TaskList: FC<TaskListProps> = () => {
         if (tasks.length === 0 && tasksFetched) {
             return (
                 <Alert variant="primary" className="text-center mb-0">
-                    <p className="my-auto fs-4">You have no tasks</p>
+                    <p className="my-auto fs-4">No tasks to show</p>
                 </Alert>
             )
         }
@@ -110,7 +111,7 @@ const TaskList: FC<TaskListProps> = () => {
     const fetchTasks = useCallback(() => {
         const rangeStart = (page - 1) * tasksPerPage
         const rangeEnd = page * tasksPerPage
-        const url = `tasks/auth/all?rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&hideCompleted=${hideCompleted}`;
+        const url = `tasks/auth/all?rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&hideCompleted=${hideCompleted}&searchTitle=${searchTitle}`
         axios.get(url)
             .then(response => {
                 setTasks(response.data.tasks);
@@ -120,29 +121,37 @@ const TaskList: FC<TaskListProps> = () => {
             .catch(error => {
                 console.log(error.response.data.message);
             })
-    }, [axios, page, tasksPerPage, hideCompleted]);
+    }, [axios, page, tasksPerPage, hideCompleted, searchTitle]);
 
     useEffect(() => {
         fetchTasks();
-        navigate(`?page=${page}&tasksPerPage=${tasksPerPage}&hideCompleted=${hideCompleted}`);
-    }, [page, fetchTasks, navigate, tasksPerPage, hideCompleted]);
+        navigate(`?page=${page}&tasksPerPage=${tasksPerPage}&hideCompleted=${hideCompleted}&searchTitle=${searchTitle}`);
+    }, [page, fetchTasks, navigate, tasksPerPage, hideCompleted, searchTitle]);
 
     return (
         <>
             <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5}
                  className="d-flex flex-row mx-auto mb-4 shadow-sm card p-3 justify-content-between">
-                <Form.Switch
-                    type="checkbox"
-                    id="hideCompleted"
-                    name="hideCompleted"
-                    label="Hide completed"
-                    className="my-auto"
-                    checked={hideCompleted}
-                    onChange={() => {
-                        setPage(1);
-                        setHideCompleted(!hideCompleted);
-                    }}
-                />
+                <div className="d-flex flex-row">
+                    <Form.Control
+                        className="w-auto"
+                        placeholder="Task title"
+                        onChange={e => setSearchTitle(e.target.value)}
+                        value={searchTitle}
+                    />
+                    <Form.Switch
+                        type="checkbox"
+                        id="hideCompleted"
+                        name="hideCompleted"
+                        label="Hide completed"
+                        className="my-auto ms-3"
+                        checked={hideCompleted}
+                        onChange={() => {
+                            setPage(1);
+                            setHideCompleted(!hideCompleted);
+                        }}
+                    />
+                </div>
                 <Form.Select
                     className="w-auto"
                     onChange={e => changeNumberOfTasksPerPage(parseInt(e.target.value))}
