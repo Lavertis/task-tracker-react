@@ -45,8 +45,8 @@ function App() {
 
                     <Route element={<ProtectedRoute/>}>
                         <Route path="/tasks/create" element={<AddTask/>}/>
-                        <Route path="/tasks/user/all/*" element={<TaskList/>}/>
-                        <Route path="/tasks/edit/:taskId" element={<EditTask/>}/>
+                        <Route path="/tasks/*" element={<TaskList/>}/>
+                        <Route path="/tasks/:taskId/edit" element={<EditTask/>}/>
                         <Route path="/account" element={<AccountDetails/>}/>
                         <Route path="/account/edit" element={<AccountDetailsEdit/>}/>
                     </Route>
