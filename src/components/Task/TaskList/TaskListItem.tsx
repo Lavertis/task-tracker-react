@@ -118,7 +118,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                                 </Button>
                             }
 
-                            <Link to={`/tasks/edit/${task._id}`}>
+                            <Link to={`/tasks/${task._id}/edit`}>
                                 <Button className="me-2" variant="outline-primary">
                                     <FontAwesomeIcon icon={faEdit}/>
                                 </Button>

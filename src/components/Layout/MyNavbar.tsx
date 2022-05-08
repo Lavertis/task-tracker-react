@@ -56,7 +56,7 @@ const MyNavbar: FC<NavbarProps> = () => {
                             <LinkContainer to="/">
                                 <Nav.Link>Home</Nav.Link>
                             </LinkContainer>
-                            <LinkContainer to="/tasks/user/all">
+                            <LinkContainer to="/tasks">
                                 <Nav.Link>My Tasks</Nav.Link>
                             </LinkContainer>
                             <LinkContainer to="/tasks/create">

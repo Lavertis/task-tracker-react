@@ -15,7 +15,7 @@ const TaskList: FC<TaskListProps> = () => {
 
     const [searchParams] = useSearchParams();
     const [page, setPage] = useState<number>(parseInt(searchParams.get('page') ?? '1'));
-    const [tasksPerPage] = useState<number>(parseInt(searchParams.get('limit') ?? '10'));
+    const [tasksPerPage] = useState<number>(parseInt(searchParams.get('tasksPerPage') ?? '10'));
     const [hideCompleted, setHideCompleted] = useState<boolean>(searchParams.get('hideCompleted') === 'true');
 
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -103,7 +103,9 @@ const TaskList: FC<TaskListProps> = () => {
     };
 
     const fetchTasks = useCallback(() => {
-        const url = `tasks/auth/all?page=${page}&limit=${tasksPerPage}&hideCompleted=${hideCompleted}`;
+        const rangeStart = (page - 1) * tasksPerPage
+        const rangeEnd = page * tasksPerPage
+        const url = `tasks/auth/all?rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&hideCompleted=${hideCompleted}`;
         axios.get(url)
             .then(response => {
                 setTasks(response.data.tasks);
@@ -117,7 +119,7 @@ const TaskList: FC<TaskListProps> = () => {
 
     useEffect(() => {
         fetchTasks();
-        navigate(`?page=${page}&limit=${tasksPerPage}&hideCompleted=${hideCompleted}`);
+        navigate(`?page=${page}&tasksPerPage=${tasksPerPage}&hideCompleted=${hideCompleted}`);
     }, [page, fetchTasks, navigate, tasksPerPage, hideCompleted]);
 
     return (
