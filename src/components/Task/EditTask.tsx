@@ -5,6 +5,7 @@ import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form} from "react-bootst
 import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
 import {useFormik} from "formik";
+import {getErrorsForFormik} from "../../utils/errorUtils";
 
 const editTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
@@ -38,9 +39,10 @@ const EditTask: FC<EditTaskProps> = () => {
                     navigate(-1)
                 })
                 .catch(error => {
-                    if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                        setGeneralError(error.response.data.message)
-                    }
+                    if (error.response && error.response.status >= 400 && error.response.status < 500)
+                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
+                    else
+                        setGeneralError("Internal server error")
                 })
         }
     })
@@ -52,8 +54,8 @@ const EditTask: FC<EditTaskProps> = () => {
                 formik.setValues(response.data)
             })
             .catch(error => {
-                if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                    setGeneralError(error.response.data.message)
+                if (error.response && error.response.status == 500) {
+                    setGeneralError("Internal server error")
                 }
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps

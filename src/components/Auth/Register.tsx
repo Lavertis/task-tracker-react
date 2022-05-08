@@ -5,6 +5,7 @@ import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
 import YupPassword from 'yup-password'
 import {useFormik} from "formik";
+import {getErrorsForFormik} from "../../utils/errorUtils";
 
 YupPassword(yup);
 
@@ -42,9 +43,10 @@ const Register: FC<RegisterProps> = () => {
                     navigate("/login")
                 })
                 .catch(error => {
-                    if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                        setGeneralError(error.response.data.message)
-                    }
+                    if (error.response && error.response.status >= 400 && error.response.status < 500)
+                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
+                    else
+                        setGeneralError("Internal server error")
                 })
         },
     });

@@ -7,6 +7,7 @@ import {TokenContext} from "../../App";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import YupPassword from "yup-password";
+import {getErrorsForFormik} from "../../utils/errorUtils";
 
 YupPassword(yup)
 
@@ -44,7 +45,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                 navigate('/')
             })
             .catch(error => {
-                console.log(error.response.data.message);
+                console.log(error.error.response.data);
             })
     }
 
@@ -67,9 +68,10 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                     navigate(-1)
                 })
                 .catch(error => {
-                    if (error.response && error.response.status >= 400 && error.response.status <= 500) {
-                        setGeneralError(error.response.data.message)
-                    }
+                    if (error.response && error.response.status >= 400 && error.response.status < 500)
+                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
+                    else
+                        setGeneralError("Internal server error")
                 })
         },
     });

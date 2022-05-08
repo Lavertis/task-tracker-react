@@ -2,7 +2,7 @@ import React, {FC, useContext} from 'react';
 import {Container, Nav, Navbar, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from "react-router-bootstrap";
 import {TokenContext} from "../../App";
-import {getClaimFromToken} from "../../helpers/token-helper";
+import {getClaimFromToken} from "../../utils/tokenUtils";
 import {useNavigate} from "react-router-dom";
 
 interface NavbarProps {

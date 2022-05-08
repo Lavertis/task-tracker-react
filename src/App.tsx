@@ -12,7 +12,7 @@ import TaskList from "./components/Task/TaskList/TaskList";
 import AccountDetails from "./components/Account/AccountDetails";
 import AccountDetailsEdit from "./components/Account/AccountDetailsEdit";
 import Error404NotFound from "./components/Errors/Error404NotFound";
-import {isTokenExpired} from "./helpers/token-helper";
+import {isTokenExpired} from "./utils/tokenUtils";
 import ProtectedRoute from "./components/Auth/ProtectedRoute";
 
 export const TokenContext = React.createContext<{ token: string; setToken: Dispatch<SetStateAction<string>>; }>(
