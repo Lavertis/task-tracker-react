@@ -103,6 +103,11 @@ const TaskList: FC<TaskListProps> = () => {
             })
     };
 
+    const changeSearchTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setPage(1);
+        setSearchTitle(event.target.value);
+    };
+
     const changeNumberOfTasksPerPage = (numberOfTasksPerPage: number) => {
         setTasksPerPage(numberOfTasksPerPage)
         setPage(1);
@@ -136,7 +141,7 @@ const TaskList: FC<TaskListProps> = () => {
                     <Form.Control
                         className="w-auto"
                         placeholder="Task title"
-                        onChange={e => setSearchTitle(e.target.value)}
+                        onChange={changeSearchTitle}
                         value={searchTitle}
                     />
                     <Form.Switch
