@@ -45,7 +45,7 @@ const AddTask: FC<AddTaskProps> = () => {
     })
 
     return (
-        <Col xs={11} sm={8} md={6} lg={5} xl={4} xxl={3} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
+        <Col xs={11} sm={8} md={6} lg={5} xl={4} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
             <h3 className="mb-4">Add new task</h3>
             {generalError && <Alert variant="danger" className="text-center">{generalError}</Alert>}
             <Form onSubmit={formik.handleSubmit} noValidate>
