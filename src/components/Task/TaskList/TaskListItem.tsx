@@ -29,11 +29,11 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
     const dueDate = new Date(task.dueDate);
 
     const changeTaskCompletionHandler = () => {
-        changeTaskCompletion(task._id, !task.completed)
+        changeTaskCompletion(task.id, !task.completed)
     }
 
     const deleteTaskHandler = () => {
-        deleteTask(task._id)
+        deleteTask(task.id)
     }
 
     const getTaskStatus = () => {
@@ -85,7 +85,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
 
     return (
         <>
-            <Accordion.Item eventKey={task._id}>
+            <Accordion.Item eventKey={task.id}>
                 <Accordion.Header>
                     <div className="d-flex justify-content-between w-100">
                         <Col className="my-auto h5 me-2">{task.title}</Col>
@@ -118,7 +118,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                                 </Button>
                             }
 
-                            <Link to={`/tasks/${task._id}/edit`}>
+                            <Link to={`/tasks/${task.id}/edit`}>
                                 <Button className="me-2" variant="outline-primary">
                                     <FontAwesomeIcon icon={faEdit}/>
                                 </Button>

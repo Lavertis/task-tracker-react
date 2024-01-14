@@ -34,7 +34,7 @@ const TaskList: FC<TaskListProps> = () => {
         return tasks.map((task) => {
             return (
                 <TaskListItem
-                    key={task._id}
+                    key={task.id}
                     task={task}
                     deleteTask={deleteTask}
                     changeTaskCompletion={changeTaskCompletion}
@@ -92,7 +92,7 @@ const TaskList: FC<TaskListProps> = () => {
         axios.patch(`/tasks/${taskId}`, {completed: completed})
             .then(() => {
                 setTasks(tasks.map(task => {
-                    if (task._id === taskId) {
+                    if (task.id === taskId) {
                         task.completed = completed;
                     }
                     return task;

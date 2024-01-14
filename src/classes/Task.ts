@@ -1,5 +1,5 @@
 export class Task {
-    public _id: string;
+    public id: string;
     public title: string;
     public description: string;
     public completed: boolean;
@@ -11,7 +11,7 @@ export class Task {
 
     constructor(id?: string, title?: string, description?: string, completed?: boolean, priority?: number,
                 dueDate?: string, userId?: string, createdAt?: Date, updatedAt?: Date) {
-        this._id = id || '';
+        this.id = id || '';
         this.title = title || '';
         this.description = description || '';
         this.completed = completed || false;
