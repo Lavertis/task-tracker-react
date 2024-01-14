@@ -116,10 +116,10 @@ const TaskList: FC<TaskListProps> = () => {
     const fetchTasks = useCallback(() => {
         const rangeStart = (page - 1) * tasksPerPage
         const rangeEnd = page * tasksPerPage
-        const url = `tasks/auth/all?rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&hideCompleted=${hideCompleted}&searchTitle=${searchTitle}`
+        const url = `tasks?rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&hideCompleted=${hideCompleted}&searchTitle=${searchTitle}`
         axios.get(url)
             .then(response => {
-                setTasks(response.data.tasks);
+                setTasks(response.data.items);
                 setTasksFetched(true);
                 setPageCount(Math.ceil(response.data.totalCount / tasksPerPage));
             })
