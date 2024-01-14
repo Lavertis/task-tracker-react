@@ -54,7 +54,7 @@ const EditTask: FC<EditTaskProps> = () => {
                 formik.setValues(response.data)
             })
             .catch(error => {
-                if (error.response && error.response.status == 500) {
+                if (error.response && error.response.status === 500) {
                     setGeneralError("Internal server error")
                 }
             })

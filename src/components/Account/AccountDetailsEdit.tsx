@@ -38,7 +38,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     const showModal = () => setModalIsShown(true);
 
     const handleDelete = () => {
-        axios.delete(`users`)
+        axios.delete(`users/current`)
             .then(() => {
                 setToken('')
                 localStorage.removeItem("jwtToken")
@@ -63,7 +63,13 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                 setGeneralError("At least one field must be filled")
                 return
             }
-            axios.patch("users", values)
+            let filteredValues = {...values};
+            Object.keys(filteredValues).forEach(key => {
+                if (filteredValues[key as keyof typeof filteredValues] === '') {
+                    delete filteredValues[key as keyof typeof filteredValues];
+                }
+            });
+            axios.patch("users/current", filteredValues)
                 .then(() => {
                     navigate(-1)
                 })
