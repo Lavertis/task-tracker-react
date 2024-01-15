@@ -5,7 +5,6 @@ import {TokenContext} from "../../App";
 import useAxios from "../../hooks/useAxios";
 import {useFormik} from "formik";
 import * as yup from "yup";
-import {getErrorsForFormik} from "../../utils/errorUtils";
 
 const loginValidationSchema = yup.object().shape({
     email: yup.string().required().label('Email'),
@@ -37,7 +36,7 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                 })
                 .catch(error => {
                     if (error.response && error.response.status >= 400 && error.response.status < 500)
-                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
+                        formik.setErrors(error.response.data.errors)
                     else
                         setGeneralError("Internal server error")
                 })

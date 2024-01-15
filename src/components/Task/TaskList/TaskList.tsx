@@ -77,7 +77,7 @@ const TaskList: FC<TaskListProps> = () => {
     }
 
     const deleteTask = (taskId: string) => {
-        axios.delete(`/tasks/${taskId}`)
+        axios.delete(`tasks/${taskId}`)
             .then(() => {
                 if (tasks.length === 1 && page > 1)
                     setPage(page - 1);
@@ -89,7 +89,7 @@ const TaskList: FC<TaskListProps> = () => {
     };
 
     const changeTaskCompletion = (taskId: string, completed: boolean) => {
-        axios.patch(`/tasks/${taskId}`, {completed: completed})
+        axios.patch(`tasks/${taskId}`, {completed: completed})
             .then(() => {
                 setTasks(tasks.map(task => {
                     if (task.id === taskId) {

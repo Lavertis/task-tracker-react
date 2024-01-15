@@ -5,7 +5,6 @@ import useAxios from "../../hooks/useAxios";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import moment from "moment";
-import {getErrorsForFormik} from "../../utils/errorUtils";
 
 const addTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
@@ -37,7 +36,7 @@ const AddTask: FC<AddTaskProps> = () => {
                 })
                 .catch(error => {
                     if (error.response && error.response.status >= 400 && error.response.status < 500)
-                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
+                        formik.setErrors(error.response.data.errors)
                     else
                         setGeneralError("Internal server error")
                 })

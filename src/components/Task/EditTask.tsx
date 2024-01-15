@@ -5,7 +5,6 @@ import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form} from "react-bootst
 import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
 import {useFormik} from "formik";
-import {getErrorsForFormik} from "../../utils/errorUtils";
 
 const editTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
@@ -34,13 +33,13 @@ const EditTask: FC<EditTaskProps> = () => {
         },
         validationSchema: editTaskValidationSchema,
         onSubmit: async (values) => {
-            axios.put(`tasks/${taskId}`, values)
+            axios.patch(`tasks/${taskId}`, values)
                 .then(() => {
                     navigate(-1)
                 })
                 .catch(error => {
                     if (error.response && error.response.status >= 400 && error.response.status < 500)
-                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
+                        formik.setErrors(error.response.data.errors)
                     else
                         setGeneralError("Internal server error")
                 })
