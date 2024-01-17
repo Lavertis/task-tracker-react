@@ -118,11 +118,11 @@ const TaskList: FC<TaskListProps> = () => {
         const rangeStart = (page - 1) * tasksPerPage
         const rangeEnd = page * tasksPerPage
         const url = 'tasks?' +
-        `rangeStart=${rangeStart}` +
-        `&rangeEnd=${rangeEnd}` +
-        `&hideCompleted=${hideCompleted}` +
-        `&searchTitle=${searchTitle}` +
-        `&priority=${searchByPriority}`;
+            `rangeStart=${rangeStart}` +
+            `&rangeEnd=${rangeEnd}` +
+            `&hideCompleted=${hideCompleted}` +
+            `&searchTitle=${searchTitle}` +
+            `&priority=${searchByPriority}`;
 
         axios.get(url)
             .then(response => {
