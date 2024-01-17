@@ -32,7 +32,7 @@ const MyNavbar: FC<NavbarProps> = () => {
     }
 
     const getUserDropdown = () => {
-        const email = getClaimFromToken(token, 'sub');
+        const email = getClaimFromToken(token, 'email');
 
         return (
             <NavDropdown title={email} align={"end"}>
