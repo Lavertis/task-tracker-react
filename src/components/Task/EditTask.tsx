@@ -5,6 +5,8 @@ import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form} from "react-bootst
 import useAxios from "../../hooks/useAxios";
 import * as yup from "yup";
 import {useFormik} from "formik";
+import {SelectOption} from "../../types/select-option";
+import Select, {MultiValue} from "react-select";
 
 const editTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
@@ -22,6 +24,8 @@ const EditTask: FC<EditTaskProps> = () => {
     const axios = useAxios()
     const navigate = useNavigate()
     const [generalError, setGeneralError] = useState("")
+    const [tags, setTags] = useState<SelectOption[]>([])
+    const [selectedTags, setSelectedTags] = useState<MultiValue<SelectOption>>([])
 
     const formik = useFormik({
         initialValues: {
@@ -29,10 +33,12 @@ const EditTask: FC<EditTaskProps> = () => {
             description: '',
             priority: 0,
             completed: false,
-            dueDate: ''
+            dueDate: '',
+            tags: new Array<string>()
         },
         validationSchema: editTaskValidationSchema,
         onSubmit: async (values) => {
+            values.tags = selectedTags.map((tag: SelectOption) => tag.value)
             axios.patch(`tasks/${taskId}`, values)
                 .then(() => {
                     navigate(-1)
@@ -51,6 +57,12 @@ const EditTask: FC<EditTaskProps> = () => {
             .then(response => {
                 response.data.dueDate = moment(response.data.dueDate).format("YYYY-MM-DDTHH:mm")
                 formik.setValues(response.data)
+                setSelectedTags(response.data.tags.map((tag: any) => {
+                    return {
+                        value: tag.id,
+                        label: tag.name
+                    }
+                }))
             })
             .catch(error => {
                 if (error.response && error.response.status === 500) {
@@ -59,6 +71,21 @@ const EditTask: FC<EditTaskProps> = () => {
             })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [axios, taskId]);
+
+    useEffect(() => {
+        axios.get('tags')
+            .then(response => {
+                setTags(response.data.map((tag: any) => {
+                    return {
+                        value: tag.id,
+                        label: tag.name
+                    }
+                }))
+            })
+            .catch(() => {
+                setGeneralError("Internal server error")
+            })
+    }, [axios]);
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
@@ -132,6 +159,17 @@ const EditTask: FC<EditTaskProps> = () => {
                         </Button>
                     </ButtonGroup>
                     <Form.Control.Feedback type="invalid">{formik.errors.priority}</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="tags">Tags</Form.Label>
+                    <Select
+                        isMulti
+                        id="tags"
+                        name="tags"
+                        onChange={setSelectedTags}
+                        value={selectedTags}
+                        options={tags}
+                    />
                 </Form.Group>
                 <Form.Group className="d-flex justify-content-center">
                     <Form.Check

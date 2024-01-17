@@ -1,10 +1,12 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {Alert, Button, ButtonGroup, Col, FloatingLabel, Form} from "react-bootstrap";
 import useAxios from "../../hooks/useAxios";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import moment from "moment";
+import {SelectOption} from "../../types/select-option";
+import Select, {MultiValue} from "react-select";
 
 const addTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
@@ -20,16 +22,20 @@ const AddTask: FC<AddTaskProps> = () => {
     const axios = useAxios()
     const navigate = useNavigate()
     const [generalError, setGeneralError] = useState("")
+    const [tags, setTags] = useState<SelectOption[]>([])
+    const [selectedTags, setSelectedTags] = useState<MultiValue<SelectOption>>([])
 
     const formik = useFormik({
         initialValues: {
             title: '',
             description: '',
             priority: 1,
-            dueDate: ''
+            dueDate: '',
+            tags: new Array<string>()
         },
         validationSchema: addTaskValidationSchema,
         onSubmit: async (values) => {
+            values.tags = selectedTags.map((tag: SelectOption) => tag.value)
             axios.post('tasks', values)
                 .then(() => {
                     navigate("/tasks/user/all")
@@ -42,6 +48,21 @@ const AddTask: FC<AddTaskProps> = () => {
                 })
         }
     })
+
+    useEffect(() => {
+        axios.get('tags')
+            .then(response => {
+                setTags(response.data.map((tag: any) => {
+                    return {
+                        value: tag.id,
+                        label: tag.name
+                    }
+                }))
+            })
+            .catch(() => {
+                setGeneralError("Internal server error")
+            })
+    }, []);
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">
@@ -115,6 +136,17 @@ const AddTask: FC<AddTaskProps> = () => {
                         </Button>
                     </ButtonGroup>
                     <Form.Control.Feedback type="invalid">{formik.errors.priority}</Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group className="mb-3">
+                    <Form.Label htmlFor="tags">Tags</Form.Label>
+                    <Select
+                        isMulti
+                        id="tags"
+                        name="tags"
+                        onChange={setSelectedTags}
+                        value={selectedTags}
+                        options={tags}
+                    />
                 </Form.Group>
                 <Form.Group className="d-grid mt-4">
                     <Button type="submit" variant="primary">Add Task</Button>
