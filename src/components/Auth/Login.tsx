@@ -35,9 +35,9 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
                     navigate(redirectTo)
                 })
                 .catch(error => {
-                    if (error.response.status == 400)
+                    if (error.response.status === 400)
                         formik.setErrors(error.response.data.errors)
-                    else if (error.response.status == 404)
+                    else if (error.response.status === 404)
                         setGeneralError("Invalid email or password")
                     else if (error.response.status > 400 && error.response.status < 500)
                         setGeneralError("Internal server error")

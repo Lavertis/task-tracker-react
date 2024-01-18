@@ -10,7 +10,7 @@ import Select, {MultiValue} from "react-select";
 
 const addTaskValidationSchema = yup.object().shape({
     title: yup.string().required().min(3).max(50).label('Title'),
-    description: yup.string().max(120).label('Description'),
+    description: yup.string().max(200).label('Description'),
     priority: yup.number().required().min(1).max(3).label('Priority'),
     dueDate: yup.date().required().min(moment().format("YYYY-MM-DD HH:mm")).label('Due date')
 });
@@ -30,6 +30,7 @@ const AddTask: FC<AddTaskProps> = () => {
             title: '',
             description: '',
             priority: 1,
+            completed: false,
             dueDate: '',
             tags: new Array<string>()
         },
@@ -62,7 +63,7 @@ const AddTask: FC<AddTaskProps> = () => {
             .catch(() => {
                 setGeneralError("Internal server error")
             })
-    }, []);
+    }, [axios]);
 
     return (
         <Col xs={11} sm={8} md={6} lg={5} xl={4} className="mx-auto my-auto bg-light rounded-3 p-5 shadow">

@@ -94,7 +94,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                 </Accordion.Header>
                 <Accordion.Body>
                     <Col md={12} className="mb-4">
-                        <div className="d-flex justify-content-between">
+                        <div className="d-flex justify-content-between mb-3">
                             <h5 className="card-title col-7">
                                 {dueDate.toLocaleDateString('en-US', dateOptions)}
                             </h5>
@@ -103,6 +103,10 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                             </h5>
                         </div>
                         <p className="card-text break-words">{task.description}</p>
+                        <p className="card-text break-words">
+                            <span className="fw-bold">Tags: </span>
+                            {task.tags.map(tag => tag.name).join(', ')}
+                        </p>
                     </Col>
 
                     <div className="d-flex flex-column flex-sm-row justify-content-between">
