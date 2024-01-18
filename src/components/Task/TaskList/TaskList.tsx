@@ -142,7 +142,7 @@ const TaskList: FC<TaskListProps> = () => {
 
     return (
         <>
-            <Col xs={11} lg={9} xl={7} xxl={6}
+            <Col xs={12} md={11} lg={10} xl={8} xxl={7}
                  className="d-flex flex-row mx-auto mb-4 shadow-sm card p-3 justify-content-between">
                 <div className="d-flex flex-row">
                     <Form.Control
@@ -184,7 +184,7 @@ const TaskList: FC<TaskListProps> = () => {
                         </option>))}
                 </Form.Select>
             </Col>
-            <Col xs={11} lg={9} xl={7} xxl={6} className="mx-auto mb-5 shadow-sm">
+            <Col xs={12} md={11} lg={10} xl={8} xxl={7} className="mx-auto mb-5 shadow-sm">
                 <Accordion defaultActiveKey="0" alwaysOpen>
                     {getTaskListItems()}
                 </Accordion>
