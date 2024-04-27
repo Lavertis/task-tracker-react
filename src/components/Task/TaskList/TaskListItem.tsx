@@ -29,11 +29,11 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
     const dueDate = new Date(task.dueDate);
 
     const changeTaskCompletionHandler = () => {
-        changeTaskCompletion(task._id, !task.completed)
+        changeTaskCompletion(task.id, !task.completed)
     }
 
     const deleteTaskHandler = () => {
-        deleteTask(task._id)
+        deleteTask(task.id)
     }
 
     const getTaskStatus = () => {
@@ -85,7 +85,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
 
     return (
         <>
-            <Accordion.Item eventKey={task._id}>
+            <Accordion.Item eventKey={task.id}>
                 <Accordion.Header>
                     <div className="d-flex justify-content-between w-100">
                         <Col className="my-auto h5 me-2">{task.title}</Col>
@@ -94,7 +94,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                 </Accordion.Header>
                 <Accordion.Body>
                     <Col md={12} className="mb-4">
-                        <div className="d-flex justify-content-between">
+                        <div className="d-flex justify-content-between mb-3">
                             <h5 className="card-title col-7">
                                 {dueDate.toLocaleDateString('en-US', dateOptions)}
                             </h5>
@@ -103,6 +103,10 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                             </h5>
                         </div>
                         <p className="card-text break-words">{task.description}</p>
+                        <p className="card-text break-words">
+                            <span className="fw-bold">Tags: </span>
+                            {task.tags.map(tag => tag.name).join(', ')}
+                        </p>
                     </Col>
 
                     <div className="d-flex flex-column flex-sm-row justify-content-between">
@@ -118,7 +122,7 @@ const TaskListItem: FC<TaskListItemProps> = ({task, deleteTask, changeTaskComple
                                 </Button>
                             }
 
-                            <Link to={`/tasks/${task._id}/edit`}>
+                            <Link to={`/tasks/${task.id}/edit`}>
                                 <Button className="me-2" variant="outline-primary">
                                     <FontAwesomeIcon icon={faEdit}/>
                                 </Button>

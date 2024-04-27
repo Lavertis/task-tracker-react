@@ -5,7 +5,6 @@ import {TokenContext} from "../../App";
 import useAxios from "../../hooks/useAxios";
 import {useFormik} from "formik";
 import * as yup from "yup";
-import {getErrorsForFormik} from "../../utils/errorUtils";
 
 const loginValidationSchema = yup.object().shape({
     email: yup.string().required().label('Email'),
@@ -29,16 +28,18 @@ const Login: FC<LoginProps> = ({redirectTo}) => {
         },
         validationSchema: loginValidationSchema,
         onSubmit: async (values) => {
-            axios.post("auth", values)
+            axios.post("auth/sign-in", values)
                 .then(response => {
                     setToken(response.data.jwtToken)
                     localStorage.setItem("jwtToken", response.data.jwtToken)
                     navigate(redirectTo)
                 })
                 .catch(error => {
-                    if (error.response && error.response.status >= 400 && error.response.status < 500)
-                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
-                    else
+                    if (error.response.status === 400)
+                        formik.setErrors(error.response.data.errors)
+                    else if (error.response.status === 404)
+                        setGeneralError("Invalid email or password")
+                    else if (error.response.status > 400 && error.response.status < 500)
                         setGeneralError("Internal server error")
                 })
         },

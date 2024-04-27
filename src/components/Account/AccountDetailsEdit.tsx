@@ -7,7 +7,6 @@ import {TokenContext} from "../../App";
 import {useFormik} from "formik";
 import * as yup from "yup";
 import YupPassword from "yup-password";
-import {getErrorsForFormik} from "../../utils/errorUtils";
 
 YupPassword(yup)
 
@@ -38,7 +37,7 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
     const showModal = () => setModalIsShown(true);
 
     const handleDelete = () => {
-        axios.delete(`users`)
+        axios.delete(`users/current`)
             .then(() => {
                 setToken('')
                 localStorage.removeItem("jwtToken")
@@ -63,13 +62,19 @@ const AccountDetailsEdit: FC<AccountDetailsEditProps> = () => {
                 setGeneralError("At least one field must be filled")
                 return
             }
-            axios.patch("users", values)
+            let filteredValues = {...values};
+            Object.keys(filteredValues).forEach(key => {
+                if (filteredValues[key as keyof typeof filteredValues] === '') {
+                    delete filteredValues[key as keyof typeof filteredValues];
+                }
+            });
+            axios.patch("users/current", filteredValues)
                 .then(() => {
                     navigate(-1)
                 })
                 .catch(error => {
                     if (error.response && error.response.status >= 400 && error.response.status < 500)
-                        formik.setErrors(getErrorsForFormik(error.response.data.errors))
+                        formik.setErrors(error.response.data.errors)
                     else
                         setGeneralError("Internal server error")
                 })

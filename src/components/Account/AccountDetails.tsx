@@ -14,7 +14,7 @@ const AccountDetails: FC<AccountDetailsProps> = () => {
     const [user, setUser] = React.useState<User>(new User())
 
     useEffect(() => {
-        axios.get(`users/auth`)
+        axios.get(`users/current`)
             .then(response => {
                 setUser(response.data)
             })

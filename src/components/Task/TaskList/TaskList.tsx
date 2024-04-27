@@ -18,6 +18,7 @@ const TaskList: FC<TaskListProps> = () => {
     const [tasksPerPage, setTasksPerPage] = useState<number>(parseInt(searchParams.get('tasksPerPage') ?? '10'));
     const [hideCompleted, setHideCompleted] = useState<boolean>(searchParams.get('hideCompleted') === 'true');
     const [searchTitle, setSearchTitle] = useState<string>(searchParams.get('searchTitle') ?? '');
+    const [searchByPriority, setSearchByPriority] = useState<string>(searchParams.get('searchByPriority') ?? '');
 
     const [tasks, setTasks] = useState<Task[]>([]);
     const [tasksFetched, setTasksFetched] = useState<boolean>(false);
@@ -34,7 +35,7 @@ const TaskList: FC<TaskListProps> = () => {
         return tasks.map((task) => {
             return (
                 <TaskListItem
-                    key={task._id}
+                    key={task.id}
                     task={task}
                     deleteTask={deleteTask}
                     changeTaskCompletion={changeTaskCompletion}
@@ -77,7 +78,7 @@ const TaskList: FC<TaskListProps> = () => {
     }
 
     const deleteTask = (taskId: string) => {
-        axios.delete(`/tasks/${taskId}`)
+        axios.delete(`tasks/${taskId}`)
             .then(() => {
                 if (tasks.length === 1 && page > 1)
                     setPage(page - 1);
@@ -89,10 +90,10 @@ const TaskList: FC<TaskListProps> = () => {
     };
 
     const changeTaskCompletion = (taskId: string, completed: boolean) => {
-        axios.patch(`/tasks/${taskId}`, {completed: completed})
+        axios.patch(`tasks/${taskId}`, {completed: completed})
             .then(() => {
                 setTasks(tasks.map(task => {
-                    if (task._id === taskId) {
+                    if (task.id === taskId) {
                         task.completed = completed;
                     }
                     return task;
@@ -116,26 +117,32 @@ const TaskList: FC<TaskListProps> = () => {
     const fetchTasks = useCallback(() => {
         const rangeStart = (page - 1) * tasksPerPage
         const rangeEnd = page * tasksPerPage
-        const url = `tasks/auth/all?rangeStart=${rangeStart}&rangeEnd=${rangeEnd}&hideCompleted=${hideCompleted}&searchTitle=${searchTitle}`
+        const url = 'tasks?' +
+            `rangeStart=${rangeStart}` +
+            `&rangeEnd=${rangeEnd}` +
+            `&hideCompleted=${hideCompleted}` +
+            `&searchTitle=${searchTitle}` +
+            `&priority=${searchByPriority}`;
+
         axios.get(url)
             .then(response => {
-                setTasks(response.data.tasks);
+                setTasks(response.data.items);
                 setTasksFetched(true);
                 setPageCount(Math.ceil(response.data.totalCount / tasksPerPage));
             })
             .catch(error => {
                 console.log(error.error.response.data);
             })
-    }, [axios, page, tasksPerPage, hideCompleted, searchTitle]);
+    }, [axios, page, tasksPerPage, hideCompleted, searchTitle, searchByPriority]);
 
     useEffect(() => {
         fetchTasks();
-        navigate(`?page=${page}&tasksPerPage=${tasksPerPage}&hideCompleted=${hideCompleted}&searchTitle=${searchTitle}`);
-    }, [page, fetchTasks, navigate, tasksPerPage, hideCompleted, searchTitle]);
+        navigate(`?page=${page}&tasksPerPage=${tasksPerPage}&hideCompleted=${hideCompleted}&searchTitle=${searchTitle}&searchByPriority=${searchByPriority}`)
+    }, [page, fetchTasks, navigate, tasksPerPage, hideCompleted, searchTitle, searchByPriority]);
 
     return (
         <>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5}
+            <Col xs={12} md={11} lg={10} xl={8} xxl={7}
                  className="d-flex flex-row mx-auto mb-4 shadow-sm card p-3 justify-content-between">
                 <div className="d-flex flex-row">
                     <Form.Control
@@ -159,6 +166,16 @@ const TaskList: FC<TaskListProps> = () => {
                 </div>
                 <Form.Select
                     className="w-auto"
+                    onChange={e => setSearchByPriority(e.target.value)}
+                    value={searchByPriority}>
+                    <option value="">All priorities</option>
+                    <option value="1">Low priority</option>
+                    <option value="2">Medium priority</option>
+                    <option value="3">High priority</option>
+                </Form.Select>
+
+                <Form.Select
+                    className="w-auto"
                     onChange={e => changeNumberOfTasksPerPage(parseInt(e.target.value))}
                     value={tasksPerPage}>
                     {[5, 10, 15, 20].map(value => (
@@ -167,7 +184,7 @@ const TaskList: FC<TaskListProps> = () => {
                         </option>))}
                 </Form.Select>
             </Col>
-            <Col xs={11} sm={9} md={8} lg={7} xl={6} xxl={5} className="mx-auto mb-5 shadow-sm">
+            <Col xs={12} md={11} lg={10} xl={8} xxl={7} className="mx-auto mb-5 shadow-sm">
                 <Accordion defaultActiveKey="0" alwaysOpen>
                     {getTaskListItems()}
                 </Accordion>
